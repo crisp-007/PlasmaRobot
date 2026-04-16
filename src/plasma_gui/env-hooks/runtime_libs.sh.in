@@ -1,0 +1,8 @@
+# Qt6
+ament_prepend_unique_value LD_LIBRARY_PATH "/home/larusxu/Qt/6.7.2/gcc_arm64/lib"
+
+# Third-party libs discovered by CMake
+ament_prepend_unique_value LD_LIBRARY_PATH "/usr/local/Open3D-0.19.0/lib"
+ament_prepend_unique_value LD_LIBRARY_PATH "/usr/local/PCL1.15.0/lib"
+ament_prepend_unique_value LD_LIBRARY_PATH "/usr/local/VTK9.3.0/lib"
+

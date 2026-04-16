@@ -1,0 +1,60 @@
+# ROS 2 / colcon workspace outputs
+/build/
+/install/
+/log/
+
+# Colcon and ament helper files
+/.colcon/
+/.ros/
+/*.repos
+
+# CMake / Make / general native build outputs
+*.d
+*.slo
+*.lo
+*.o
+*.obj
+*.gch
+*.pch
+*.so
+*.dylib
+*.dll
+*.mod
+*.smod
+*.lai
+*.la
+*.a
+*.lib
+*.exe
+*.out
+*.app
+*.cmake
+CMakeCache.txt
+CMakeFiles/
+cmake-build-*/
+compile_commands.json
+Makefile
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+
+# Test / coverage artifacts
+coverage/
+.coverage
+test_results/
+
+# IDE and editor files
+.vscode/
+.idea/
+.qtc_clangd/
+*.workspace.user
+
+# Local tool caches
+.DS_Store
+Thumbs.db
+.cache/

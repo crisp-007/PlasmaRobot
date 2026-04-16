@@ -1,0 +1,1232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Serial</class>
+ <widget class="QWidget" name="Serial">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1200</width>
+    <height>660</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>串口通信设置</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+    background-color: #2b2b2b;
+    color: #ffffff;
+    font-family: &quot;Microsoft YaHei&quot;;
+}
+
+QGroupBox {
+    font-weight: bold;
+    border: 2px solid #555555;
+    border-radius: 8px;
+    margin-top: 10px;
+    padding-top: 10px;
+    background-color: #3a3a3a;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 8px 0 8px;
+    color: #ffffff;
+}
+
+QComboBox {
+    border: 1px solid #555555;
+    border-radius: 4px;
+    padding: 4px 8px;
+    background-color: #4a4a4a;
+    color: #ffffff;
+    min-height: 20px;
+}
+
+QComboBox::drop-down {
+    border: none;
+    width: 20px;
+}
+
+QComboBox::down-arrow {
+    image: none;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #ffffff;
+    margin-right: 5px;
+}
+
+QComboBox QAbstractItemView {
+    border: 1px solid #555555;
+    background-color: #4a4a4a;
+    selection-background-color: #0078d4;
+}
+
+QPushButton {
+    background-color: #0078d4;
+    border: 1px solid #005a9e;
+    border-radius: 6px;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 8px 16px;
+    min-height: 20px;
+}
+
+QPushButton:hover {
+    background-color: #106ebe;
+    border: 1px solid #005a9e;
+}
+
+QPushButton:pressed {
+    background-color: #005a9e;
+}
+
+QPushButton:disabled {
+    background-color: #555555;
+    border: 1px solid #444444;
+    color: #888888;
+}
+
+QTextEdit {
+    border: 1px solid #555555;
+    border-radius: 4px;
+    background-color: #1e1e1e;
+    color: #ffffff;
+    font-family: &quot;Consolas&quot;, &quot;Monaco&quot;, monospace;
+    font-size: 10pt;
+}
+
+QCheckBox {
+    color: #ffffff;
+    spacing: 8px;
+}
+
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #555555;
+    border-radius: 3px;
+    background-color: #4a4a4a;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #0078d4;
+    border: 1px solid #005a9e;
+}
+
+QCheckBox::indicator:checked::after {
+    content: &quot;?&quot;;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+QLabel {
+    color: #ffffff;
+}
+
+QLabel#statusLabel {
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: #4a4a4a;
+}
+
+QLabel#statisticsLabel {
+    color: #cccccc;
+    font-size: 9pt;
+}</string>
+  </property>
+  <layout class="QHBoxLayout" name="mainLayout" stretch="0,1">
+   <property name="spacing">
+    <number>10</number>
+   </property>
+   <property name="leftMargin">
+    <number>15</number>
+   </property>
+   <property name="topMargin">
+    <number>15</number>
+   </property>
+   <property name="rightMargin">
+    <number>15</number>
+   </property>
+   <property name="bottomMargin">
+    <number>15</number>
+   </property>
+   <item>
+    <layout class="QVBoxLayout" name="leftLayout">
+     <item>
+      <widget class="QGroupBox" name="connectionGroupBox">
+       <property name="minimumSize">
+        <size>
+         <width>300</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>430</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel{
+	background-color:transparent;
+	border:1px solid white;
+	border-radius:5px;
+}</string>
+       </property>
+       <property name="title">
+        <string>连接设置</string>
+       </property>
+       <layout class="QGridLayout" name="connectionLayout">
+        <property name="spacing">
+         <number>10</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="portLabel">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>端口</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="portComboBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>150</width>
+            <height>30</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QPushButton" name="refreshButton">
+          <property name="maximumSize">
+           <size>
+            <width>80</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>刷新</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QPushButton" name="connectButton">
+          <property name="maximumSize">
+           <size>
+            <width>80</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>连接</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="baudRateLabel">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>波特率</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QComboBox" name="baudRateComboBox">
+          <property name="currentText">
+           <string>115200</string>
+          </property>
+          <property name="currentIndex">
+           <number>7</number>
+          </property>
+          <item>
+           <property name="text">
+            <string>1200</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>2400</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>4800</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>9600</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>19200</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>38400</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>57600</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>115200</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="dataBitsLabel">
+          <property name="text">
+           <string>数据位</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QComboBox" name="dataBitsComboBox">
+          <property name="currentIndex">
+           <number>3</number>
+          </property>
+          <item>
+           <property name="text">
+            <string>5</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>6</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>7</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>8</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="parityLabel">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>校验位</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QComboBox" name="parityComboBox">
+          <item>
+           <property name="text">
+            <string>无校验</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>偶校验</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>奇校验</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>空格校验</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>标记校验</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QLabel" name="stopBitsLabel">
+          <property name="text">
+           <string>停止位</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <widget class="QComboBox" name="stopBitsComboBox">
+          <item>
+           <property name="text">
+            <string>1</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>1.5</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>2</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="flowControlLabel">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>流控制</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QComboBox" name="flowControlComboBox">
+          <item>
+           <property name="text">
+            <string>无流控</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>硬件流控</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>软件流控</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="3" column="2" colspan="2">
+         <widget class="QLabel" name="statusLabel">
+          <property name="styleSheet">
+           <string notr="true">color: #f44336;
+border:0px;</string>
+          </property>
+          <property name="text">
+           <string>状态: 未连接</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="plasmaControlGroupBox">
+       <property name="minimumSize">
+        <size>
+         <width>400</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>430</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>等离子控制系统</string>
+       </property>
+       <layout class="QVBoxLayout" name="plasmaControlLayout">
+        <item>
+         <layout class="QHBoxLayout" name="emergencyLayout">
+          <item>
+           <widget class="QPushButton" name="emergencyStopButton">
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: #d32f2f;
+    border: 2px solid #b71c1c;
+    font-weight: bold;
+    font-size: 12pt;
+}
+QPushButton:hover {
+    background-color: #f44336;
+}
+QPushButton:pressed {
+    background-color: #b71c1c;
+}</string>
+            </property>
+            <property name="text">
+             <string>紧急停止</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="emergencySpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="resetSystemButton">
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: #388e3c;
+    border: 2px solid #2e7d32;
+}
+QPushButton:hover {
+    background-color: #4caf50;
+}
+QPushButton:pressed {
+    background-color: #2e7d32;
+}</string>
+            </property>
+            <property name="text">
+             <string>系统复位1</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="controlPanelsLayout">
+          <item>
+           <widget class="QGroupBox" name="plasmaGroupBox">
+            <property name="title">
+             <string>等离子电源</string>
+            </property>
+            <layout class="QVBoxLayout" name="plasmaLayout">
+             <item>
+              <layout class="QHBoxLayout" name="plasma_relay_layout">
+               <item>
+                <widget class="QCheckBox" name="plasmaRelayCheckBox">
+                 <property name="styleSheet">
+                  <string notr="true">background-color:transparent;</string>
+                 </property>
+                 <property name="text">
+                  <string>等离子电源继电器</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="voltageRelayCheckBox">
+                 <property name="styleSheet">
+                  <string notr="true">background-color:transparent;</string>
+                 </property>
+                 <property name="text">
+                  <string>调压器继电器</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="plasmaValueLayout">
+               <item>
+                <widget class="QLabel" name="plasmaValueLabel">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>28</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color:transparent;</string>
+                 </property>
+                 <property name="text">
+                  <string>设定值</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="plasmaValueSpinBox">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>28</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QSpinBox {
+    border: 1px solid #555555;
+    border-radius: 4px;
+    padding: 4px;
+    background-color: #4a4a4a;
+    color: #ffffff;
+}</string>
+                 </property>
+                 <property name="maximum">
+                  <number>65535</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="plasmaCurrentValueLabel">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>28</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color:transparent;</string>
+                 </property>
+                 <property name="text">
+                  <string>当前值</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="plasmaCurrentValueDisplay">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>28</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    border: 1px solid #555555;
+    border-radius: 4px;
+    padding: 4px;
+    background-color: #4a4a4a;
+    color: #ffffff;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>0</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="heliumArgonLayout">
+          <item>
+           <widget class="QGroupBox" name="heliumGroupBox">
+            <property name="title">
+             <string>氦气控制</string>
+            </property>
+            <layout class="QVBoxLayout" name="heliumLayout">
+             <item>
+              <layout class="QHBoxLayout" name="helium_control_layout">
+               <item>
+                <widget class="QCheckBox" name="heliumFlowMeterCheckBox">
+                 <property name="styleSheet">
+                  <string notr="true">background-color:transparent;</string>
+                 </property>
+                 <property name="text">
+                  <string>氦气流量计</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="heliumValveCheckBox">
+                 <property name="styleSheet">
+                  <string notr="true">background-color:transparent;</string>
+                 </property>
+                 <property name="text">
+                  <string>氦气电磁阀</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="heliumValueLayout">
+               <item>
+                <widget class="QLabel" name="heliumValueLabel">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>35</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color:transparent;</string>
+                 </property>
+                 <property name="text">
+                  <string>设定值</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="heliumValueSpinBox">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QSpinBox {
+    border: 1px solid #555555;
+    border-radius: 4px;
+    padding: 4px;
+    background-color: #4a4a4a;
+    color: #ffffff;
+}</string>
+                 </property>
+                 <property name="maximum">
+                  <number>65535</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="heliumCurrentValueLayout">
+               <item>
+                <widget class="QLabel" name="heliumCurrentValueLabel">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>35</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color:transparent;</string>
+                 </property>
+                 <property name="text">
+                  <string>当前值</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="heliumCurrentValueDisplay">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    border: 1px solid #555555;
+    border-radius: 4px;
+    padding: 4px;
+    background-color: #4a4a4a;
+    color: #ffffff;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>0</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="argonGroupBox">
+            <property name="title">
+             <string>氩气控制</string>
+            </property>
+            <layout class="QVBoxLayout" name="argonLayout">
+             <item>
+              <layout class="QHBoxLayout" name="argon_control_layout">
+               <item>
+                <widget class="QCheckBox" name="argonFlowMeterCheckBox">
+                 <property name="styleSheet">
+                  <string notr="true">background-color:transparent;</string>
+                 </property>
+                 <property name="text">
+                  <string>氩气流量计</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="argonValveCheckBox">
+                 <property name="styleSheet">
+                  <string notr="true">background-color:transparent;</string>
+                 </property>
+                 <property name="text">
+                  <string>氩气电磁阀</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="argonValueLayout">
+               <item>
+                <widget class="QLabel" name="argonValueLabel">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>35</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color:transparent;</string>
+                 </property>
+                 <property name="text">
+                  <string>设定值</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="argonValueSpinBox">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QSpinBox {
+    border: 1px solid #555555;
+    border-radius: 4px;
+    padding: 4px;
+    background-color: #4a4a4a;
+    color: #ffffff;
+}</string>
+                 </property>
+                 <property name="maximum">
+                  <number>65535</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="argonCurrentValueLayout">
+               <item>
+                <widget class="QLabel" name="argonCurrentValueLabel">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>35</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color:transparent;</string>
+                 </property>
+                 <property name="text">
+                  <string>当前值</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="argonCurrentValueDisplay">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    border: 1px solid #555555;
+    border-radius: 4px;
+    padding: 4px;
+    background-color: #4a4a4a;
+    color: #ffffff;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>0</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="controlButtonsLayout">
+          <item>
+           <widget class="QPushButton" name="sendControlPacketButton">
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: #1976d2;
+    border: 2px solid #1565c0;
+    font-weight: bold;
+}
+QPushButton:hover {
+    background-color: #2196f3;
+}
+QPushButton:pressed {
+    background-color: #1565c0;
+}</string>
+            </property>
+            <property name="text">
+             <string>发送控制指令</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="loadTestPacketButton">
+            <property name="text">
+             <string>加载测试数据包</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="instantSendModeButton">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>38</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>调试模式</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="controlButtonsSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="rightLayout">
+     <item>
+      <layout class="QVBoxLayout" name="dataLayout" stretch="0,1,0,1,0">
+       <property name="spacing">
+        <number>8</number>
+       </property>
+       <property name="leftMargin">
+        <number>10</number>
+       </property>
+       <property name="topMargin">
+        <number>10</number>
+       </property>
+       <property name="rightMargin">
+        <number>10</number>
+       </property>
+       <property name="bottomMargin">
+        <number>10</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="receiveOptionsLayout">
+         <item>
+          <widget class="QLabel" name="receiveLabel">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>接收区</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="receiveHorizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="hexReceiveCheckBox">
+           <property name="text">
+            <string>十六进制显示</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="logModeCheckBox">
+           <property name="text">
+            <string>日志模式</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="clearReceiveButton">
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>清空</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="receiveTextEdit">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="sendOptionsLayout">
+         <item>
+          <widget class="QLabel" name="sendLabel">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>发送区</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="hexSendCheckBox">
+           <property name="text">
+            <string>十六进制发送</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="newLineCheckBox">
+           <property name="text">
+            <string>自动换行</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="autoClearSendCheckBox">
+           <property name="text">
+            <string>发送后清空</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="sendTextEdit">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>80</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="sendButtonLayout">
+         <item>
+          <spacer name="sendButtonSpacer">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="clearSendButton">
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>清空</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="sendButton">
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>发送</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="statusLayout">
+       <item>
+        <widget class="QLabel" name="statisticsLabel">
+         <property name="text">
+          <string>接收: 0 字节 | 发送: 0 字节</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="statusSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
