@@ -1,0 +1,135 @@
+board: charuco_9x7_20mm
+board_details:
+  squares:
+  - 9
+  - 7
+  square_size_mm: 20.0
+  marker_size_mm: 15.0
+  dictionary: DICT_4X4_50
+camera:
+  model: Intel RealSense L515
+  serial: f1423110
+  width: 640
+  height: 480
+method: TSAI
+selection: AUTO
+n_samples: 58
+n_failed: 0
+used_images:
+- img_001.png
+- img_002.png
+- img_003.png
+- img_004.png
+- img_005.png
+- img_006.png
+- img_007.png
+- img_008.png
+- img_009.png
+- img_010.png
+- img_011.png
+- img_012.png
+- img_013.png
+- img_014.png
+- img_015.png
+- img_016.png
+- img_017.png
+- img_018.png
+- img_019.png
+- img_020.png
+- img_021.png
+- img_022.png
+- img_023.png
+- img_024.png
+- img_025.png
+- img_026.png
+- img_027.png
+- img_028.png
+- img_029.png
+- img_030.png
+- img_031.png
+- img_032.png
+- img_033.png
+- img_034.png
+- img_035.png
+- img_036.png
+- img_037.png
+- img_038.png
+- img_039.png
+- img_040.png
+- img_041.png
+- img_042.png
+- img_043.png
+- img_044.png
+- img_045.png
+- img_046.png
+- img_047.png
+- img_048.png
+- img_049.png
+- img_050.png
+- img_051.png
+- img_052.png
+- img_053.png
+- img_054.png
+- img_055.png
+- img_056.png
+- img_057.png
+- img_058.png
+failed_images: []
+T_camera_to_gripper:
+- - -0.8761026938400751
+  - -0.4820239226930491
+  - 0.009849253665585103
+  - -0.03667808260078715
+- - 0.4821000790706463
+  - -0.8760811967072424
+  - 0.00782627217024288
+  - -0.061625162481591104
+- - 0.004856295526455075
+  - 0.011604944102040828
+  - 0.9999208677021139
+  - 0.029686177776824012
+- - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+T_gripper_to_camera:
+- - -0.8761026938400751
+  - 0.48210007907064617
+  - 0.004856295526455075
+  - -0.0025684361186570585
+- - -0.48202392269304906
+  - -0.8760811967072423
+  - 0.011604944102040828
+  - -0.07201286577994497
+- - 0.009849253665585103
+  - 0.00782627217024288
+  - 0.9999208677021139
+  - -0.02884028160774227
+- - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+t_camera_to_gripper_mm:
+- -36.678083
+- -61.625162
+- 29.686178
+camera_matrix:
+- - 603.1371459960938
+  - 0.0
+  - 323.3505554199219
+- - 0.0
+  - 603.1104736328125
+  - 242.12680053710938
+- - 0.0
+  - 0.0
+  - 1.0
+dist_coeffs:
+- 0.13920314610004425
+- -0.45931169390678406
+- -0.0006744764395989478
+- -0.0006421792786568403
+- 0.4030662178993225
+quality_accepted: false
+deployment:
+  status: rejected
+  current_symlink_switched: false

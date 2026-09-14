@@ -72,3 +72,12 @@ test_results/
 .DS_Store
 Thumbs.db
 .cache/
+
+# Local third-party checkout (kept outside this repository's history)
+/reference/cc_space/CloudCompare/
+
+# Keil/embedded generated outputs
+*.crf
+*.axf
+*.map
+*.dep

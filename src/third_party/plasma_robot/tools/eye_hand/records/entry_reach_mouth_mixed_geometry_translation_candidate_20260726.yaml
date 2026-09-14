@@ -1,0 +1,59 @@
+schema_version: 1
+name: entry_reach_mouth_mixed_geometry_translation_candidate_20260726
+status: rejected_mixed_geometry_training_set
+validated: false
+execution_allowed: false
+motion_commands_published: false
+method: three_or_more_point_translation_only_source_frame_correction
+source_frame: camera_depth_optical_frame
+meaning: T_base_source_corrected = T_base_source_current * T_source_correction
+training_record_ids:
+  - 20260726_142449
+  - 20260726_143630
+  - 20260726_152216
+training_acquisition_ids:
+  - 重建1路径_1785046734_923161617@1785046734.923161617
+  - 重建2路径_1785047402_252260104@1785047402.252260104
+  - 重建1路径_1785050059_580721636@1785050059.580721636
+T_source_correction:
+  -
+    - 1
+    - 0
+    - 0
+    - -0.03263863334509361
+  -
+    - 0
+    - 1
+    - 0
+    - -0.06036534345071628
+  -
+    - 0
+    - 0
+    - 1
+    - -0.0032990655172954
+  -
+    - 0
+    - 0
+    - 0
+    - 1
+metrics:
+  rotation_deg: 0
+  translation_mm:
+    - -32.63863334509361
+    - -60.36534345071628
+    - -3.2990655172954
+  singular_values:
+    - 0
+    - 0
+    - 0
+  training_residual_mm:
+    - 13.78078998262436
+    - 21.9927320274358
+    - 17.70559724658312
+  training_rms_mm: 18.1390794367117
+  training_max_mm: 21.9927320274358
+review:
+  independent_blind_validation_required: true
+  may_replace_handeye_yaml: false
+  may_enable_motion: false
+  note: Rejected. The three records mix two different entry-axis algorithms and retain 18.139 mm training RMS. This correction must never be loaded.

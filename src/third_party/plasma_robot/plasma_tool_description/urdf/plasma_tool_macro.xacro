@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="plasma_tool" params="
+      parent_link
+      mount_xyz mount_rpy
+      adapter_mesh adapter_xyz adapter_rpy
+      adapter_mass adapter_inertial_xyz adapter_inertial_rpy
+      adapter_ixx adapter_ixy adapter_ixz adapter_iyy adapter_iyz adapter_izz
+      spray_rod_mesh rod_xyz rod_rpy
+      spray_rod_mass spray_rod_inertial_xyz spray_rod_inertial_rpy
+      spray_rod_ixx spray_rod_ixy spray_rod_ixz spray_rod_iyy spray_rod_iyz spray_rod_izz
+      nozzle_tip_xyz nozzle_tip_rpy
+      motion_tcp_xyz motion_tcp_rpy
+      nozzle_tip_from_motion_tcp_xyz
+      spray_outlet_xyz spray_outlet_rpy">
+
+    <link name="plasma_tool_base_link">
+      <inertial>
+        <origin xyz="-1.759E-07 0.02497 0.0428" rpy="0 0 0"/>
+        <mass value="0.180721738279306"/>
+        <inertia ixx="0.000138130675577891" ixy="-2.6261056277312E-10"
+          ixz="-6.35486422323285E-12" iyy="0.000156940897134088"
+          iyz="1.37580712120744E-10" izz="7.74611978883539E-05"/>
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="package://plasma_tool_description/meshes/base/tool_base_link.STL"/>
+        </geometry>
+        <material name="plasma_tool_base_color">
+          <color rgba="0.72 0.78 0.84 1"/>
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://plasma_tool_description/meshes/base/tool_base_link.STL"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="Link6_to_plasma_tool_base" type="fixed">
+      <origin xyz="${mount_xyz}" rpy="${mount_rpy}"/>
+      <parent link="${parent_link}"/>
+      <child link="plasma_tool_base_link"/>
+    </joint>
+
+    <link name="plasma_adapter_link">
+      <inertial>
+        <origin xyz="${adapter_inertial_xyz}" rpy="${adapter_inertial_rpy}"/>
+        <mass value="${adapter_mass}"/>
+        <inertia ixx="${adapter_ixx}" ixy="${adapter_ixy}" ixz="${adapter_ixz}"
+          iyy="${adapter_iyy}" iyz="${adapter_iyz}" izz="${adapter_izz}"/>
+      </inertial>
+      <visual>
+        <geometry><mesh filename="${adapter_mesh}"/></geometry>
+        <material name="plasma_adapter_color"><color rgba="0.88 0.88 0.90 1"/></material>
+      </visual>
+      <collision><geometry><mesh filename="${adapter_mesh}"/></geometry></collision>
+    </link>
+
+    <joint name="plasma_tool_base_to_adapter" type="fixed">
+      <origin xyz="${adapter_xyz}" rpy="${adapter_rpy}"/>
+      <parent link="plasma_tool_base_link"/>
+      <child link="plasma_adapter_link"/>
+    </joint>
+
+    <link name="plasma_spray_rod_link">
+      <inertial>
+        <origin xyz="${spray_rod_inertial_xyz}" rpy="${spray_rod_inertial_rpy}"/>
+        <mass value="${spray_rod_mass}"/>
+        <inertia ixx="${spray_rod_ixx}" ixy="${spray_rod_ixy}" ixz="${spray_rod_ixz}"
+          iyy="${spray_rod_iyy}" iyz="${spray_rod_iyz}" izz="${spray_rod_izz}"/>
+      </inertial>
+      <visual>
+        <geometry><mesh filename="${spray_rod_mesh}"/></geometry>
+        <material name="plasma_spray_rod_color"><color rgba="0.72 0.72 0.74 1"/></material>
+      </visual>
+      <collision><geometry><mesh filename="${spray_rod_mesh}"/></geometry></collision>
+    </link>
+
+    <joint name="plasma_adapter_to_spray_rod" type="fixed">
+      <origin xyz="${rod_xyz}" rpy="${rod_rpy}"/>
+      <parent link="plasma_adapter_link"/>
+      <child link="plasma_spray_rod_link"/>
+    </joint>
+
+    <link name="Arm_Tip"/>
+    <joint name="plasma_spray_rod_to_Arm_Tip" type="fixed">
+      <origin xyz="${nozzle_tip_xyz}" rpy="${nozzle_tip_rpy}"/>
+      <parent link="plasma_spray_rod_link"/>
+      <child link="Arm_Tip"/>
+    </joint>
+
+    <link name="plasma_nozzle_tip"/>
+    <joint name="plasma_motion_tcp_to_nozzle_tip" type="fixed">
+      <origin xyz="${nozzle_tip_from_motion_tcp_xyz}" rpy="0 0 0"/>
+      <parent link="plasma_motion_tcp"/>
+      <child link="plasma_nozzle_tip"/>
+    </joint>
+
+    <link name="plasma_motion_tcp"/>
+    <joint name="plasma_spray_rod_to_motion_tcp" type="fixed">
+      <origin xyz="${motion_tcp_xyz}" rpy="${motion_tcp_rpy}"/>
+      <parent link="plasma_spray_rod_link"/>
+      <child link="plasma_motion_tcp"/>
+    </joint>
+
+    <link name="plasma_spray_outlet"/>
+    <joint name="plasma_motion_tcp_to_spray_outlet" type="fixed">
+      <origin xyz="${spray_outlet_xyz}" rpy="${spray_outlet_rpy}"/>
+      <parent link="plasma_motion_tcp"/>
+      <child link="plasma_spray_outlet"/>
+    </joint>
+  </xacro:macro>
+</robot>

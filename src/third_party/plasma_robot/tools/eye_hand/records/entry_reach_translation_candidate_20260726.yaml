@@ -1,0 +1,68 @@
+schema_version: 1
+name: entry_reach_translation_candidate_20260726
+status: rejected_after_independent_blind_validation
+validated: false
+execution_allowed: false
+motion_commands_published: false
+method: three_or_more_point_translation_only_source_frame_correction
+source_frame: camera_depth_optical_frame
+meaning: T_base_source_corrected = T_base_source_current * T_source_correction
+training_record_ids:
+  - 20260725_225321
+  - 20260725_231734
+  - 20260725_232255
+training_acquisition_ids:
+  - 重建1路径_1784990887_763282990@1784990887.763282990
+  - 重建1路径_1784992463_997811327@1784992463.997811327
+  - 重建1路径_1784992786_857446327@1784992786.857446327
+T_source_correction:
+  -
+    - 1
+    - 0
+    - 0
+    - -0.017892607989239
+  -
+    - 0
+    - 1
+    - 0
+    - -0.05132915979068137
+  -
+    - 0
+    - 0
+    - 1
+    - -0.007984215105528899
+  -
+    - 0
+    - 0
+    - 0
+    - 1
+metrics:
+  rotation_deg: 0
+  translation_mm:
+    - -17.892607989239
+    - -51.32915979068137
+    - -7.984215105528899
+  singular_values:
+    - 0
+    - 0
+    - 0
+  training_residual_mm:
+    - 14.06097317333457
+    - 9.299747585919018
+    - 5.80798790407114
+  training_rms_mm: 10.29448064477397
+  training_max_mm: 14.06097317333457
+review:
+  independent_blind_validation_required: true
+  may_replace_handeye_yaml: false
+  may_enable_motion: false
+  note: Translation-only candidate; preview and independent blind validation are required.
+  independent_blind_validation:
+    record_id: 20260726_125603
+    result_yaml: entry_reach_translation_blind_20260726.yaml
+    total_error_mm: 21.66040585416127
+    axial_error_mm: 9.433405599833556
+    lateral_error_mm: 19.49830865885584
+    axis_alignment_deg: 11.70901792337489
+    accepted: false
+    conclusion: fixed translation compensation rejected

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name="rm_eco65_with_plasma_tool">
+  <group name="rm_group">
+    <chain base_link="baselink" tip_link="Link6"/>
+  </group>
+
+  <group_state name="zero" group="rm_group">
+    <joint name="joint1" value="0"/>
+    <joint name="joint2" value="0"/>
+    <joint name="joint3" value="0"/>
+    <joint name="joint4" value="0"/>
+    <joint name="joint5" value="0"/>
+    <joint name="joint6" value="0"/>
+  </group_state>
+
+  <disable_collisions link1="Link1" link2="Link2" reason="Adjacent"/>
+  <disable_collisions link1="Link1" link2="baselink" reason="Adjacent"/>
+  <disable_collisions link1="baselink" link2="plasma_cabinet_collision_link" reason="Adjacent"/>
+  <disable_collisions link1="Link2" link2="Link3" reason="Adjacent"/>
+  <disable_collisions link1="Link2" link2="Link4" reason="Never"/>
+  <disable_collisions link1="Link3" link2="Link4" reason="Adjacent"/>
+  <disable_collisions link1="Link3" link2="Link5" reason="Never"/>
+  <disable_collisions link1="Link4" link2="Link5" reason="Adjacent"/>
+  <disable_collisions link1="Link4" link2="Link6" reason="Never"/>
+  <disable_collisions link1="Link5" link2="Link6" reason="Adjacent"/>
+  <disable_collisions link1="Link6" link2="plasma_tool_base_link" reason="Adjacent"/>
+  <disable_collisions link1="plasma_tool_base_link" link2="plasma_adapter_link" reason="Adjacent"/>
+  <disable_collisions link1="plasma_adapter_link" link2="plasma_spray_rod_link" reason="Adjacent"/>
+  <disable_collisions link1="plasma_spray_rod_link" link2="Arm_Tip" reason="Adjacent"/>
+  <disable_collisions link1="plasma_spray_rod_link" link2="plasma_motion_tcp" reason="Adjacent"/>
+  <disable_collisions link1="plasma_motion_tcp" link2="plasma_nozzle_tip" reason="Adjacent"/>
+  <disable_collisions link1="plasma_motion_tcp" link2="plasma_spray_outlet" reason="Adjacent"/>
+</robot>

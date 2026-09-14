@@ -1,0 +1,59 @@
+schema_version: 1
+name: entry_reach_refinement_candidate_20260725
+status: training_candidate_only
+validated: false
+execution_allowed: false
+motion_commands_published: false
+method: three_or_more_point_kabsch_source_frame_correction
+source_frame: camera_depth_optical_frame
+meaning: T_base_source_corrected = T_base_source_current * T_source_correction
+training_record_ids:
+  - 20260725_225321
+  - 20260725_231734
+  - 20260725_232255
+training_acquisition_ids:
+  - 重建1路径_1784990887_763282990@1784990887.763282990
+  - 重建1路径_1784992463_997811327@1784992463.997811327
+  - 重建1路径_1784992786_857446327@1784992786.857446327
+T_source_correction:
+  -
+    - 0.9968758143380559
+    - 0.02424547642684462
+    - 0.07517158812125993
+    - -0.05279792648407183
+  -
+    - -0.01243734076509295
+    - 0.988033121567906
+    - -0.1537395955486793
+    - 0.01850078556103677
+  -
+    - -0.07799950860441349
+    - 0.1523243498512758
+    - 0.9852478719083109
+    - -0.007638826697117906
+  -
+    - 0
+    - 0
+    - 0
+    - 1
+metrics:
+  rotation_deg: 9.910299608005644
+  translation_mm:
+    - -52.79792648407182
+    - 18.50078556103677
+    - -7.638826697117906
+  singular_values:
+    - 0.007323415267054688
+    - 0.002061030648952612
+    - 2.340470723654345e-19
+  training_residual_mm:
+    - 3.184492344937199
+    - 4.940472027753181
+    - 4.571556047971357
+  training_rms_mm: 4.299161935839695
+  training_max_mm: 4.940472027753181
+review:
+  independent_blind_validation_required: true
+  may_replace_handeye_yaml: false
+  may_enable_motion: false
+  note: Candidate is fitted to the same entry observations and is not an acceptance result.

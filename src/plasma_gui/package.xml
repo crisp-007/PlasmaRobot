@@ -12,6 +12,17 @@
   <depend>rclcpp</depend>
   <depend>std_msgs</depend>
   <depend>sensor_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>rm_ros_interfaces</depend>
+  <depend>plasma_robot_interfaces</depend>
+  <exec_depend>plasma_tool_description</exec_depend>
+  <depend>ament_index_cpp</depend>
+  <depend>yaml_cpp_vendor</depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>rm_driver</exec_depend>
+  <exec_depend>plasma_path_transform</exec_depend>
+  <exec_depend>plasma_path_executor</exec_depend>
+  <exec_depend>plasma_camera_bridge</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

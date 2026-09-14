@@ -1,0 +1,619 @@
+timestamp: 2026-07-29T18:18:34+0800
+dataset: calib_data/handeye_l515_20260729_161944_precision_v1_stable_001_058
+accepted: false
+selected_method: TSAI
+selection_mode: AUTO
+camera:
+  model: Intel RealSense L515
+  serial: f1423110
+  width: 640
+  height: 480
+sample_quality:
+  images: 58
+  pose_rows: 58
+  valid_images: 58
+  failed_images: []
+  corners:
+    min: 36.0
+    median: 46.0
+    mean: 45.362069
+    max: 48.0
+    std: 2.904801
+  reprojection_px:
+    min: 0.10288
+    median: 0.15171
+    mean: 0.15711
+    max: 0.240923
+    std: 0.030577
+  sharpness:
+    min: 873.317445
+    median: 1196.596719
+    mean: 1266.099692
+    max: 1884.303362
+    std: 257.796311
+pose_coverage:
+  sample_count: 58
+  translation_span_xyz_m:
+  - 0.266498
+  - 0.281547
+  - 0.290622
+  translation_bbox_diagonal_m: 0.484511
+  j6_range_deg:
+  - -230.8
+  - 310.01
+  j6_span_deg: 540.81
+  rotation_axis_eigenvalues:
+  - 0.097773
+  - 0.112046
+  - 0.790181
+  rotation_pairs_ge_15_deg: 1552
+  near_duplicate_pairs: 0
+  near_duplicate_pair_indices: []
+  image_grid_bins: 9
+  image_grid_covered:
+  - - 0
+    - 0
+  - - 0
+    - 1
+  - - 0
+    - 2
+  - - 1
+    - 0
+  - - 1
+    - 1
+  - - 1
+    - 2
+  - - 2
+    - 0
+  - - 2
+    - 1
+  - - 2
+    - 2
+  board_distance_range_m:
+  - 0.312493
+  - 0.57264
+  board_distance_span_m: 0.260148
+method_reports:
+  TSAI:
+    T_camera_to_gripper:
+    - - -0.8761026938400751
+      - -0.4820239226930491
+      - 0.009849253665585103
+      - -0.03667808260078715
+    - - 0.4821000790706463
+      - -0.8760811967072424
+      - 0.00782627217024288
+      - -0.061625162481591104
+    - - 0.004856295526455075
+      - 0.011604944102040828
+      - 0.9999208677021139
+      - 0.029686177776824012
+    - - 0.0
+      - 0.0
+      - 0.0
+      - 1.0
+    t_camera_to_gripper_mm:
+    - -36.678083
+    - -61.625162
+    - 29.686178
+    fixed_board:
+      translation_mm:
+        min: 0.365251
+        median: 2.540732
+        mean: 2.862264
+        max: 6.91537
+        std: 1.549003
+      rotation_deg:
+        min: 0.118925
+        median: 0.645816
+        mean: 0.671161
+        max: 1.474365
+        std: 0.340903
+    leave_one_out_influence:
+      translation_mm:
+        min: 0.011276
+        median: 0.17102
+        mean: 0.252561
+        max: 1.432479
+        std: 0.254633
+      rotation_deg:
+        min: 0.001862
+        median: 0.019489
+        mean: 0.031542
+        max: 0.125022
+        std: 0.028744
+      worst_samples:
+      - image: img_057.png
+        translation_mm: 1.432479
+        rotation_deg: 0.078672
+      - image: img_055.png
+        translation_mm: 0.841174
+        rotation_deg: 0.125022
+      - image: img_011.png
+        translation_mm: 0.839229
+        rotation_deg: 0.024949
+      - image: img_058.png
+        translation_mm: 0.721818
+        rotation_deg: 0.025993
+      - image: img_037.png
+        translation_mm: 0.696216
+        rotation_deg: 0.022356
+    kfold_fixed_board:
+      folds: 5
+      translation_mm:
+        min: 0.713147
+        median: 2.675345
+        mean: 3.068139
+        max: 6.998988
+        std: 1.49067
+      rotation_deg:
+        min: 0.113845
+        median: 0.70584
+        mean: 0.707115
+        max: 1.570393
+        std: 0.360031
+      worst_samples:
+      - fold: 0
+        image: img_001.png
+        translation_mm: 6.998988
+        rotation_deg: 0.870032
+      - fold: 1
+        image: img_002.png
+        translation_mm: 6.713276
+        rotation_deg: 0.92524
+      - fold: 2
+        image: img_008.png
+        translation_mm: 5.845599
+        rotation_deg: 0.738659
+      - fold: 0
+        image: img_056.png
+        translation_mm: 5.824844
+        rotation_deg: 0.462467
+      - fold: 2
+        image: img_003.png
+        translation_mm: 5.751331
+        rotation_deg: 0.951988
+    normalized_score: 7.279067
+  PARK:
+    T_camera_to_gripper:
+    - - -0.8784946920499519
+      - -0.4776574310918399
+      - 0.009510760369371929
+      - -0.03645402622659845
+    - - 0.47773281440165977
+      - -0.8784640359719599
+      - 0.008502678847907482
+      - -0.06179123158859454
+    - - 0.004293493203345078
+      - 0.01201316055445986
+      - 0.9999186216335834
+      - 0.02958297236163765
+    - - 0.0
+      - 0.0
+      - 0.0
+      - 1.0
+    t_camera_to_gripper_mm:
+    - -36.454026
+    - -61.791232
+    - 29.582972
+    fixed_board:
+      translation_mm:
+        min: 0.566291
+        median: 2.549763
+        mean: 2.977976
+        max: 7.510395
+        std: 1.687911
+      rotation_deg:
+        min: 0.125508
+        median: 0.632892
+        mean: 0.669254
+        max: 1.470047
+        std: 0.335715
+    leave_one_out_influence:
+      translation_mm:
+        min: 0.008427
+        median: 0.170946
+        mean: 0.25228
+        max: 1.396256
+        std: 0.251266
+      rotation_deg:
+        min: 0.001554
+        median: 0.020729
+        mean: 0.031088
+        max: 0.11584
+        std: 0.028048
+      worst_samples:
+      - image: img_057.png
+        translation_mm: 1.396256
+        rotation_deg: 0.074899
+      - image: img_055.png
+        translation_mm: 0.833636
+        rotation_deg: 0.11584
+      - image: img_011.png
+        translation_mm: 0.828116
+        rotation_deg: 0.016004
+      - image: img_058.png
+        translation_mm: 0.706618
+        rotation_deg: 0.023169
+      - image: img_056.png
+        translation_mm: 0.692265
+        rotation_deg: 0.002402
+    kfold_fixed_board:
+      folds: 5
+      translation_mm:
+        min: 0.496226
+        median: 2.818953
+        mean: 3.187015
+        max: 7.401103
+        std: 1.611442
+      rotation_deg:
+        min: 0.091988
+        median: 0.703987
+        mean: 0.706781
+        max: 1.568768
+        std: 0.359961
+      worst_samples:
+      - fold: 0
+        image: img_001.png
+        translation_mm: 7.401103
+        rotation_deg: 0.868762
+      - fold: 1
+        image: img_002.png
+        translation_mm: 7.339701
+        rotation_deg: 0.91405
+      - fold: 2
+        image: img_008.png
+        translation_mm: 6.083244
+        rotation_deg: 0.714858
+      - fold: 0
+        image: img_056.png
+        translation_mm: 6.062275
+        rotation_deg: 0.402479
+      - fold: 0
+        image: img_006.png
+        translation_mm: 6.045963
+        rotation_deg: 1.134761
+    normalized_score: 7.326796
+  HORAUD:
+    T_camera_to_gripper:
+    - - -0.8790183582495041
+      - -0.47670054440462867
+      - 0.009127805030814
+      - -0.036401838428042926
+    - - 0.47677110263973427
+      - -0.878987070638261
+      - 0.008428839686709674
+      - -0.06182584237625575
+    - - 0.0040051901380385255
+      - 0.01176097849258149
+      - 0.999922815939738
+      - 0.029550064268002992
+    - - 0.0
+      - 0.0
+      - 0.0
+      - 1.0
+    t_camera_to_gripper_mm:
+    - -36.401838
+    - -61.825842
+    - 29.550064
+    fixed_board:
+      translation_mm:
+        min: 0.557826
+        median: 2.608885
+        mean: 3.007029
+        max: 7.603294
+        std: 1.688957
+      rotation_deg:
+        min: 0.137065
+        median: 0.634206
+        mean: 0.66812
+        max: 1.463778
+        std: 0.337267
+    leave_one_out_influence:
+      translation_mm:
+        min: 0.009037
+        median: 0.168485
+        mean: 0.252603
+        max: 1.391139
+        std: 0.250867
+      rotation_deg:
+        min: 0.00272
+        median: 0.019317
+        mean: 0.031222
+        max: 0.127457
+        std: 0.028853
+      worst_samples:
+      - image: img_057.png
+        translation_mm: 1.391139
+        rotation_deg: 0.084594
+      - image: img_055.png
+        translation_mm: 0.834964
+        rotation_deg: 0.127457
+      - image: img_011.png
+        translation_mm: 0.822665
+        rotation_deg: 0.018563
+      - image: img_058.png
+        translation_mm: 0.707799
+        rotation_deg: 0.022271
+      - image: img_056.png
+        translation_mm: 0.703543
+        rotation_deg: 0.005507
+    kfold_fixed_board:
+      folds: 5
+      translation_mm:
+        min: 0.476096
+        median: 2.777198
+        mean: 3.221952
+        max: 7.432849
+        std: 1.628579
+      rotation_deg:
+        min: 0.095414
+        median: 0.699253
+        mean: 0.705077
+        max: 1.561361
+        std: 0.361338
+      worst_samples:
+      - fold: 0
+        image: img_001.png
+        translation_mm: 7.432849
+        rotation_deg: 0.859789
+      - fold: 1
+        image: img_002.png
+        translation_mm: 7.370854
+        rotation_deg: 0.909528
+      - fold: 2
+        image: img_008.png
+        translation_mm: 6.157165
+        rotation_deg: 0.711145
+      - fold: 0
+        image: img_006.png
+        translation_mm: 6.096417
+        rotation_deg: 1.117188
+      - fold: 0
+        image: img_056.png
+        translation_mm: 6.090145
+        rotation_deg: 0.385522
+    normalized_score: 7.369855
+  ANDREFF:
+    T_camera_to_gripper:
+    - - -0.8790572652065586
+      - -0.47662872643283616
+      - 0.009131354038662989
+      - -0.034818010421508803
+    - - 0.4766996898868612
+      - -0.8790249293917536
+      - 0.00851934091308762
+      - -0.05978656424669691
+    - - 0.003966125229634429
+      - 0.011841902162898793
+      - 0.9999220165612052
+      - 0.03570846408215563
+    - - 0.0
+      - 0.0
+      - 0.0
+      - 1.0
+    t_camera_to_gripper_mm:
+    - -34.81801
+    - -59.786564
+    - 35.708464
+    fixed_board:
+      translation_mm:
+        min: 0.775741
+        median: 3.63386
+        mean: 3.82795
+        max: 7.780757
+        std: 1.592836
+      rotation_deg:
+        min: 0.136988
+        median: 0.637835
+        mean: 0.668544
+        max: 1.463155
+        std: 0.336453
+    leave_one_out_influence:
+      translation_mm:
+        min: 0.020178
+        median: 0.225471
+        mean: 0.330303
+        max: 1.328402
+        std: 0.293015
+      rotation_deg:
+        min: 0.002349
+        median: 0.018354
+        mean: 0.030569
+        max: 0.135489
+        std: 0.028607
+      worst_samples:
+      - image: img_055.png
+        translation_mm: 1.328402
+        rotation_deg: 0.135489
+      - image: img_058.png
+        translation_mm: 1.173304
+        rotation_deg: 0.024389
+      - image: img_056.png
+        translation_mm: 1.03528
+        rotation_deg: 0.005124
+      - image: img_037.png
+        translation_mm: 0.987839
+        rotation_deg: 0.014625
+      - image: img_042.png
+        translation_mm: 0.944343
+        rotation_deg: 0.045657
+    kfold_fixed_board:
+      folds: 5
+      translation_mm:
+        min: 1.305097
+        median: 4.160011
+        mean: 4.210672
+        max: 8.396444
+        std: 1.671492
+      rotation_deg:
+        min: 0.098035
+        median: 0.697554
+        mean: 0.70524
+        max: 1.560323
+        std: 0.360452
+      worst_samples:
+      - fold: 2
+        image: img_033.png
+        translation_mm: 8.396444
+        rotation_deg: 0.664409
+      - fold: 0
+        image: img_001.png
+        translation_mm: 8.03147
+        rotation_deg: 0.860478
+      - fold: 1
+        image: img_002.png
+        translation_mm: 7.833128
+        rotation_deg: 0.910078
+      - fold: 1
+        image: img_047.png
+        translation_mm: 6.944578
+        rotation_deg: 0.934129
+      - fold: 2
+        image: img_023.png
+        translation_mm: 6.766969
+        rotation_deg: 0.38476
+    normalized_score: 8.199757
+  DANIILIDIS:
+    T_camera_to_gripper:
+    - - -0.8790520083368949
+      - -0.47663301622861765
+      - 0.009409276257126613
+      - -0.03621739066225324
+    - - 0.4767066138640861
+      - -0.879022700675797
+      - 0.008360382459331272
+      - -0.06188113400783099
+    - - 0.004286133118528194
+      - 0.011834675214786266
+      - 0.9999207816249499
+      - 0.029012261121260242
+    - - 0.0
+      - 0.0
+      - 0.0
+      - 1.0
+    t_camera_to_gripper_mm:
+    - -36.217391
+    - -61.881134
+    - 29.012261
+    fixed_board:
+      translation_mm:
+        min: 0.584799
+        median: 2.610372
+        mean: 3.045606
+        max: 7.486324
+        std: 1.669053
+      rotation_deg:
+        min: 0.127481
+        median: 0.631751
+        mean: 0.668039
+        max: 1.472189
+        std: 0.337724
+    leave_one_out_influence:
+      translation_mm:
+        min: 0.009828
+        median: 0.185213
+        mean: 0.252199
+        max: 1.07211
+        std: 0.225769
+      rotation_deg:
+        min: 0.002355
+        median: 0.018084
+        mean: 0.030481
+        max: 0.138424
+        std: 0.02889
+      worst_samples:
+      - image: img_057.png
+        translation_mm: 1.07211
+        rotation_deg: 0.096389
+      - image: img_011.png
+        translation_mm: 0.821605
+        rotation_deg: 0.018299
+      - image: img_037.png
+        translation_mm: 0.758341
+        rotation_deg: 0.014166
+      - image: img_055.png
+        translation_mm: 0.75657
+        rotation_deg: 0.138424
+      - image: img_056.png
+        translation_mm: 0.744422
+        rotation_deg: 0.005365
+    kfold_fixed_board:
+      folds: 5
+      translation_mm:
+        min: 0.366338
+        median: 2.820376
+        mean: 3.293308
+        max: 7.601216
+        std: 1.673857
+      rotation_deg:
+        min: 0.088795
+        median: 0.700938
+        mean: 0.703746
+        max: 1.566339
+        std: 0.361967
+      worst_samples:
+      - fold: 0
+        image: img_001.png
+        translation_mm: 7.601216
+        rotation_deg: 0.864005
+      - fold: 1
+        image: img_002.png
+        translation_mm: 7.520619
+        rotation_deg: 0.917865
+      - fold: 2
+        image: img_008.png
+        translation_mm: 6.559266
+        rotation_deg: 0.725074
+      - fold: 0
+        image: img_006.png
+        translation_mm: 6.331074
+        rotation_deg: 1.124055
+      - fold: 0
+        image: img_056.png
+        translation_mm: 6.315889
+        rotation_deg: 0.391603
+    normalized_score: 7.283135
+method_failures: {}
+primary_method_deltas:
+- methods:
+  - PARK
+  - TSAI
+  translation_mm: 0.297374
+  rotation_deg: 0.288177
+- methods:
+  - PARK
+  - HORAUD
+  translation_mm: 0.070742
+  rotation_deg: 0.066413
+- methods:
+  - TSAI
+  - HORAUD
+  translation_mm: 0.367573
+  rotation_deg: 0.351597
+checks:
+  sample_count: true
+  translation_each_axis: true
+  translation_diagonal: true
+  rotation_axis_diversity: true
+  no_near_duplicate_poses: true
+  j6_span: true
+  image_grid: true
+  board_distance_span: true
+  minimum_valid_samples: true
+  image_pose_pairing: true
+  valid_fraction: true
+  camera_serial: true
+  camera_resolution: true
+  fixed_board_translation: true
+  fixed_board_rotation: false
+  leave_one_out_translation: true
+  leave_one_out_rotation: true
+  kfold_translation: true
+  kfold_rotation: false
+  primary_method_translation_agreement: true
+  primary_method_rotation_agreement: true
+failed_checks:
+- fixed_board_rotation
+- kfold_rotation
+usage: Rejected; do not register, select, or use for base-frame point clouds or motion.

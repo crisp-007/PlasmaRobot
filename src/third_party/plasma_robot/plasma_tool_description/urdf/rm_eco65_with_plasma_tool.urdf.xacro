@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<robot name="rm_eco65_with_plasma_tool" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:arg name="adapter_mesh" default="package://plasma_tool_description/meshes/adapter/adapter_link_3_4.STL"/>
+  <xacro:arg name="spray_rod_mesh" default="package://plasma_tool_description/meshes/spray_rod/spray_rod_link_3_4_200_1x10.STL"/>
+  <xacro:arg name="mount_xyz" default="0 0 0"/>
+  <xacro:arg name="mount_rpy" default="1.5707963267948966 0 0"/>
+  <xacro:arg name="adapter_xyz" default="0 0.078 0"/>
+  <xacro:arg name="adapter_rpy" default="0 0 0"/>
+  <xacro:arg name="rod_xyz" default="0 0.040 0"/>
+  <xacro:arg name="rod_rpy" default="0 0 0"/>
+  <xacro:arg name="nozzle_tip_xyz" default="0 0.200 0"/>
+  <xacro:arg name="nozzle_tip_rpy" default="-1.5707963267948966 0 0"/>
+  <xacro:arg name="motion_tcp_xyz" default="0.002 0.192 0"/>
+  <xacro:arg name="motion_tcp_rpy" default="1.5707963267948966 0 1.5707963267948966"/>
+  <xacro:arg name="nozzle_tip_from_motion_tcp_xyz" default="0.008 0 -0.002"/>
+  <xacro:arg name="spray_outlet_xyz" default="0 0 0"/>
+  <xacro:arg name="spray_outlet_rpy" default="0 0 0"/>
+
+  <xacro:arg name="adapter_mass" default="0.045077"/>
+  <xacro:arg name="adapter_inertial_xyz" default="1.301e-18 0.0085802 0"/>
+  <xacro:arg name="adapter_inertial_rpy" default="0 0 0"/>
+  <xacro:arg name="adapter_ixx" default="9.4114e-06"/>
+  <xacro:arg name="adapter_ixy" default="-2.0526e-22"/>
+  <xacro:arg name="adapter_ixz" default="1.629e-38"/>
+  <xacro:arg name="adapter_iyy" default="4.3315e-06"/>
+  <xacro:arg name="adapter_iyz" default="4.2246e-38"/>
+  <xacro:arg name="adapter_izz" default="9.4114e-06"/>
+
+  <xacro:arg name="spray_rod_mass" default="0.0010957"/>
+  <xacro:arg name="spray_rod_inertial_xyz" default="0 0.099664 -3.9928e-06"/>
+  <xacro:arg name="spray_rod_inertial_rpy" default="0 0 0"/>
+  <xacro:arg name="spray_rod_ixx" default="3.6315e-06"/>
+  <xacro:arg name="spray_rod_ixy" default="2.5478e-25"/>
+  <xacro:arg name="spray_rod_ixz" default="-1.4602e-25"/>
+  <xacro:arg name="spray_rod_iyy" default="3.4144e-09"/>
+  <xacro:arg name="spray_rod_iyz" default="4.1053e-10"/>
+  <xacro:arg name="spray_rod_izz" default="3.6316e-06"/>
+
+  <xacro:include filename="$(find rm_description)/urdf/rm_eco65.urdf.xacro"/>
+  <xacro:include filename="$(find plasma_tool_description)/urdf/plasma_tool_macro.xacro"/>
+
+  <!-- Conservative cabinet collision box expressed directly in baselink. -->
+  <link name="plasma_cabinet_collision_link">
+    <visual>
+      <geometry><box size="0.995 0.603 0.954"/></geometry>
+      <material name="plasma_cabinet_preview"><color rgba="0.82 0.84 0.88 0.22"/></material>
+    </visual>
+    <collision>
+      <geometry><box size="0.995 0.603 0.954"/></geometry>
+    </collision>
+  </link>
+  <joint name="baselink_to_plasma_cabinet_collision" type="fixed">
+    <origin xyz="0.403 0 -0.403" rpy="0 0 0"/>
+    <parent link="baselink"/>
+    <child link="plasma_cabinet_collision_link"/>
+  </joint>
+
+  <xacro:plasma_tool
+    parent_link="Link6"
+    mount_xyz="$(arg mount_xyz)" mount_rpy="$(arg mount_rpy)"
+    adapter_mesh="$(arg adapter_mesh)"
+    adapter_xyz="$(arg adapter_xyz)" adapter_rpy="$(arg adapter_rpy)"
+    adapter_mass="$(arg adapter_mass)"
+    adapter_inertial_xyz="$(arg adapter_inertial_xyz)"
+    adapter_inertial_rpy="$(arg adapter_inertial_rpy)"
+    adapter_ixx="$(arg adapter_ixx)" adapter_ixy="$(arg adapter_ixy)"
+    adapter_ixz="$(arg adapter_ixz)" adapter_iyy="$(arg adapter_iyy)"
+    adapter_iyz="$(arg adapter_iyz)" adapter_izz="$(arg adapter_izz)"
+    spray_rod_mesh="$(arg spray_rod_mesh)"
+    rod_xyz="$(arg rod_xyz)" rod_rpy="$(arg rod_rpy)"
+    spray_rod_mass="$(arg spray_rod_mass)"
+    spray_rod_inertial_xyz="$(arg spray_rod_inertial_xyz)"
+    spray_rod_inertial_rpy="$(arg spray_rod_inertial_rpy)"
+    spray_rod_ixx="$(arg spray_rod_ixx)" spray_rod_ixy="$(arg spray_rod_ixy)"
+    spray_rod_ixz="$(arg spray_rod_ixz)" spray_rod_iyy="$(arg spray_rod_iyy)"
+    spray_rod_iyz="$(arg spray_rod_iyz)" spray_rod_izz="$(arg spray_rod_izz)"
+    nozzle_tip_xyz="$(arg nozzle_tip_xyz)" nozzle_tip_rpy="$(arg nozzle_tip_rpy)"
+    motion_tcp_xyz="$(arg motion_tcp_xyz)" motion_tcp_rpy="$(arg motion_tcp_rpy)"
+    nozzle_tip_from_motion_tcp_xyz="$(arg nozzle_tip_from_motion_tcp_xyz)"
+    spray_outlet_xyz="$(arg spray_outlet_xyz)" spray_outlet_rpy="$(arg spray_outlet_rpy)"/>
+</robot>

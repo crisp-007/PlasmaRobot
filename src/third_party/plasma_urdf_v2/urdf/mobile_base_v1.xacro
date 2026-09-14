@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="mobile_base"
+               params="parent_link:='world'
+                       mount_x:=0 mount_y:=0 mount_z:=0
+                       mount_roll:=0 mount_pitch:=0 mount_yaw:=0
+                       mesh_file:=''
+                       baselink_z_offset:=0
+                       baselink_yaw:=0
+                       mass:='50.0'
+                       ixx:='10.0' ixy:='0' ixz:='0'
+                       iyy:='10.0' iyz:='0'
+                       izz:='10.0'">
+
+    <!--
+      移动医疗设备外壳（类似 AGV 小车，~1m 高）
+      STL 原点 = 机械臂安装孔中心（顶面）
+      底部在 STL 坐标系 Z = -0.9472 m
+      mesh_file 需传入绝对路径（file://），由调用方根据安装路径确定
+      baselink_z_offset: 机械臂底座下沉量（安装板厚度），正数向下
+      baselink_yaw: 机械臂绕 Z 旋转角度（弧度），修正安装方向
+    -->
+
+    <!-- 外壳底部到地面的 Z 偏移（安装孔中心到地面高度） -->
+    <xacro:property name="floor_z_offset" value="0.9472"/>
+
+    <link name="mobile_base_link">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="${mass}"/>
+        <inertia
+          ixx="${ixx}" ixy="${ixy}" ixz="${ixz}"
+          iyy="${iyy}" iyz="${iyz}"
+          izz="${izz}"/>
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="${mesh_file}"/>
+        </geometry>
+        <material name="mobile_base_material">
+          <color rgba="0.85 0.85 0.90 1"/>
+        </material>
+      </visual>
+
+      <collision>
+        <!-- 用方块碰撞体替代高精度 STL（STL 有 25 万顶点，导致 MoveIt 崩溃） -->
+        <!-- 方块尺寸和位置根据 STL 边界计算 -->
+        <origin xyz="-0.403 0 -0.4702" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.995 0.603 0.954"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- 外壳固定在地面，抬高使底部正好接触地面 -->
+    <joint name="world_to_mobile_base" type="fixed">
+      <origin xyz="${mount_x} ${mount_y} ${mount_z + floor_z_offset}"
+              rpy="${mount_roll} ${mount_pitch} ${mount_yaw}"/>
+      <parent link="${parent_link}"/>
+      <child link="mobile_base_link"/>
+    </joint>
+
+    <!-- 机械臂 baselink 安装到外壳顶面安装孔（STL 原点） -->
+    <!-- baselink_z_offset 使臂下沉（安装板厚度），baselink_yaw 修正方向 -->
+    <joint name="mobile_base_to_baselink" type="fixed">
+      <origin xyz="0 0 ${-baselink_z_offset}" rpy="0 0 ${baselink_yaw}"/>
+      <parent link="mobile_base_link"/>
+      <child link="baselink"/>
+    </joint>
+
+  </xacro:macro>
+
+</robot>

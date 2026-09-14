@@ -1,0 +1,1 @@
+ 30/07 11:34:02,949 WARNING [281473290856704] (messenger-libusb.cpp:42) control_transfer returned error, index: 300, error: Resource temporarily unavailable, number: b

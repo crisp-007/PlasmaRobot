@@ -1,0 +1,24 @@
+uint8 STATE_WAITING_PATH=0
+uint8 STATE_READY_TO_PLAN=1
+uint8 STATE_PLANNING=2
+uint8 STATE_PREVIEW_READY=3
+uint8 STATE_EXECUTING=4
+uint8 STATE_AT_PRE_ENTRY=5
+uint8 STATE_ERROR=6
+uint8 STATE_COMPLETED=7
+uint8 STATE_AT_ENTRY=8
+uint8 STATE_AT_FIRST_LAYER=9
+uint8 STATE_STOPPING_IN_CAVITY=10
+uint8 STATE_STOPPED_IN_CAVITY=11
+
+std_msgs/Header header
+uint8 state
+string path_id
+bool motion_enabled
+bool path_execution_permitted
+bool plan_available
+int32 trajectory_points
+float64 planning_time_sec
+float64 pre_entry_translation_error_m
+float64 pre_entry_rotation_error_rad
+string message

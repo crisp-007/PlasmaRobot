@@ -37,6 +37,10 @@ public:
      * @return 串口名称
      */
     QString getCurrentPortName() const;
+    qint32 getCurrentBaudRate() const;
+    QString getCurrentFrameFormat() const;
+    qint64 getBytesReceived() const { return m_bytesReceived; }
+    qint64 getBytesSent() const { return m_bytesSent; }
 
 public slots:
     /**
@@ -98,7 +102,7 @@ public slots:
      * @brief 设置氦气流量计和电磁阀状态
      * @param flowMeterEnabled 流量计状态
      * @param valveEnabled 电磁阀状态
-     * @param outputValue 输出值(0-4096)
+     * @param outputValue 目标流量，单位 0.01 L/min
      */
     void setHeliumControl(bool flowMeterEnabled, bool valveEnabled, int outputValue);
     
@@ -106,7 +110,7 @@ public slots:
      * @brief 设置氩气流量计和电磁阀状态
      * @param flowMeterEnabled 流量计状态
      * @param valveEnabled 电磁阀状态
-     * @param outputValue 输出值(0-4096)
+     * @param outputValue 目标流量，单位 0.01 L/min
      */
     void setArgonControl(bool flowMeterEnabled, bool valveEnabled, int outputValue);
     
@@ -133,6 +137,11 @@ signals:
      * @param data 接收到的数据
      */
     void dataReceived(const QByteArray &data);
+    void dataSent(const QByteArray &data);
+    void statisticsUpdated(qint64 receivedBytes, qint64 sentBytes);
+    void serialErrorOccurred(const QString &message);
+    void settingsChanged();
+    void plasmaFeedbackUpdated(double feedbackVpp);
 
 private slots:
     /**
@@ -150,12 +159,14 @@ private slots:
      * @brief 更新连接状态显示
      */
     void updateConnectionStatus();
+    void onHandshakeTimeout();
 
 private:
     /**
      * @brief 初始化UI界面
      */
     void setupUI();
+    void setupPageLayout();
 
     /**
      * @brief 初始化串口参数
@@ -176,11 +187,14 @@ private:
      * @brief 更新状态栏信息
      */
     void updateStatusInfo();
+    void sendHandshake();
+    void handleHandshakeAck();
 
 private:
     Ui::Serial *ui;                    ///< UI界面指针
     QSerialPort *m_serialPort;         ///< 串口对象
     QTimer *m_statusTimer;             ///< 状态更新定时器
+    QTimer *m_handshakeTimer;          ///< 控制板握手重试定时器
     
     // 串口参数
     QString m_portName;                ///< 串口名称
@@ -194,6 +208,8 @@ private:
     qint64 m_bytesReceived;            ///< 接收字节数
     qint64 m_bytesSent;                ///< 发送字节数
     bool m_isConnected;                ///< 连接状态
+    bool m_handshakeComplete;          ///< 控制板握手状态
+    int m_handshakeAttempts;           ///< 当前握手发送次数
     
     // 日志模式
     bool m_logModeEnabled;             ///< 日志模式是否启用
@@ -204,6 +220,8 @@ private:
      * @return 16字节的控制数据包
      */
     QByteArray buildControlPacket();
+    QByteArray buildFanControlPacket() const;
+    QByteArray buildControlPacketBundle();
     
     /**
      * @brief 计算校验和
@@ -229,34 +247,27 @@ private:
      */
     void parseReceivedPacket(const QByteArray &data);
     
-    /**
-     * @brief 验证数据包校验和
-     * @param packet 完整的16字节数据包
-     * @return true-校验通过，false-校验失败
-     */
-    bool verifyPacketChecksum(const QByteArray &packet);
-    
     // 接收缓冲区和数据包解析
     QByteArray m_receiveBuffer;        ///< 接收数据缓冲区
-    
-    // 压力值存储
-    quint8 m_heliumPressure;           ///< 氦气压力值
-    quint8 m_argonPressure;            ///< 氩气压力值
+
+    // 控制板状态包中的压力单位为 MPa
+    double m_heliumPressure;
+    double m_argonPressure;
     bool m_instantSendMode;            ///< 即时发送模式标志
     QTimer *m_instantSendTimer;        ///< 即时发送模式定时器
     
 public:
     /**
      * @brief 获取氦气压力值
-     * @return 氦气压力值(0-255)
+     * @return 氦气压力值(MPa)
      */
-    quint8 getHeliumPressure() const { return m_heliumPressure; }
+    double getHeliumPressure() const { return m_heliumPressure; }
     
     /**
      * @brief 获取氩气压力值
-     * @return 氩气压力值(0-255)
+     * @return 氩气压力值(MPa)
      */
-    quint8 getArgonPressure() const { return m_argonPressure; }
+    double getArgonPressure() const { return m_argonPressure; }
     
     /**
      * @brief 获取氦气当前值控件的值
@@ -276,7 +287,7 @@ signals:
      * @param heliumPressure 氦气压力值
      * @param argonPressure 氩气压力值
      */
-    void pressureValuesUpdated(quint8 heliumPressure, quint8 argonPressure);
+    void pressureValuesUpdated(double heliumPressureMpa, double argonPressureMpa);
     
     /**
      * @brief 设备状态更新信号
@@ -288,7 +299,10 @@ signals:
      * @param arFLOWRelay 氩气流量计状态
      * @param arValve 氩气电磁阀状态
      */
-    void deviceStatusUpdated(bool emerStop, bool plasmaRelay, bool volRelay, bool heFLOWRelay, bool heValve, bool arFLOWRelay, bool arValve);
+    void deviceStatusUpdated(bool emerStop, bool plasmaRelay, bool volRelay,
+                             bool heFLOWRelay, bool heValve,
+                             bool arFLOWRelay, bool arValve,
+                             bool controlAuxFan, bool deviceFan, bool controlMainFan);
     
     /**
      * @brief 输出值更新信号
@@ -321,7 +335,10 @@ public slots:
      * @param arFLOWRelay 氩气流量计状态
      * @param arValve 氩气电磁阀状态
      */
-    void updateDeviceStatus(bool emerStop, bool plasmaRelay, bool volRelay, bool heFLOWRelay, bool heValve, bool arFLOWRelay, bool arValve);
+    void updateDeviceStatus(bool emerStop, bool plasmaRelay, bool volRelay,
+                            bool heFLOWRelay, bool heValve,
+                            bool arFLOWRelay, bool arValve,
+                            bool controlAuxFan, bool deviceFan, bool controlMainFan);
     
     /**
      * @brief 更新输出值显示

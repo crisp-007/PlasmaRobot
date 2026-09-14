@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>plasma_path_transform</name>
+  <version>0.1.0</version>
+  <description>Transforms Plasma GUI spray paths from the capture camera frame into the robot base frame.</description>
+  <maintainer email="2351787745@qq.com">larusxu</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>geometry_msgs</depend>
+  <depend>urdf</depend>
+  <depend>kdl_parser</depend>
+  <depend>orocos_kdl</depend>
+  <exec_depend>plasma_eye_hand</exec_depend>
+  <exec_depend>plasma_tool_description</exec_depend>
+  <depend>plasma_robot_interfaces</depend>
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>yaml_cpp_vendor</depend>
+
+  <test_depend>ament_cmake_gtest</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

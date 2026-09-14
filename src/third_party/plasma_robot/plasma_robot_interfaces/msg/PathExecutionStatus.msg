@@ -1,0 +1,23 @@
+uint8 STATE_IDLE=0
+uint8 STATE_PATH_READY=1
+uint8 STATE_EXECUTING=2
+uint8 STATE_STOPPING=3
+uint8 STATE_COMPLETED=4
+uint8 STATE_ERROR=5
+
+std_msgs/Header header
+uint8 state
+string path_id
+int32 current_index
+int32 total_points
+int32 layer_index
+uint8 motion_phase
+bool motion_enabled
+bool dry_run
+bool path_execution_permitted
+bool driver_ready
+bool entry_pose_valid
+bool command_in_flight
+bool desired_plasma_enabled
+bool plasma_output_enabled
+string message

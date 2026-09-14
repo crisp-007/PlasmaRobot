@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=低温等离子术中辅助系统
+Name[en]=PlasmaRobot
+Comment=PlasmaRobot GUI Application
+Exec=@CMAKE_INSTALL_PREFIX@/lib/plasma_gui/launch_plasma_gui.sh
+Icon=@CMAKE_INSTALL_PREFIX@/share/plasma_gui/icons/winicon.png
+Terminal=false
+Categories=Qt;Science;
+StartupWMClass=plasma_gui
+StartupNotify=true

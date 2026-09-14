@@ -1,0 +1,5 @@
+plasma_robot_interfaces/SprayPath input
+---
+bool success
+string message
+plasma_robot_interfaces/SprayPath output

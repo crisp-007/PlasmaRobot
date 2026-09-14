@@ -1,0 +1,31 @@
+/plasma_path_transform:
+  ros__parameters:
+    allow_camera_frame_tf: true
+    base_frame: baselink
+    camera_frame: camera_color_optical_frame
+    camera_frame_tf_timeout_sec: 0.5
+    gripper_frame: Link6
+    handeye_yaml: /home/larusxu/CodeSpace/PlasmaRobot/install/plasma_eye_hand/share/plasma_eye_hand/config/camera_to_gripper.yaml
+    input_topic: /plasma/planned_spray_path/camera
+    max_entry_axis_offset_m: 0.002
+    max_entry_orientation_error_rad: 0.08726646259971647
+    max_first_layer_axis_offset_m: 0.02
+    max_path_points: 200000
+    output_topic: /plasma/planned_spray_path/base
+    publish_unvalidated_preview: true
+    qos_overrides:
+      /parameter_events:
+        publisher:
+          depth: 1000
+          durability: volatile
+          history: keep_last
+          reliability: reliable
+    require_validated_handeye: true
+    require_validated_tcp: true
+    robot_description: ''
+    robot_description_file: /home/larusxu/CodeSpace/PlasmaRobot/install/rm_description/share/rm_description/urdf/rm_eco65.urdf
+    source_refinement_yaml: ''
+    status_topic: /plasma/path_transform/status
+    tcp_frame: plasma_motion_tcp
+    tcp_yaml: /home/larusxu/CodeSpace/PlasmaRobot/install/plasma_tool_description/share/plasma_tool_description/config/tcp_3_4_200_1x10.yaml
+    use_sim_time: false

@@ -1,0 +1,10 @@
+std_msgs/Header header
+bool robot_model_loaded
+bool handeye_loaded
+bool handeye_validated
+bool tcp_loaded
+bool tcp_validated
+bool ready_for_preview
+bool ready_for_execution
+string calibration_id
+string message

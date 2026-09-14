@@ -5,6 +5,8 @@
 #include <QThread>
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
+#include <sensor_msgs/msg/joint_state.hpp>
+#include <std_srvs/srv/trigger.hpp>
 
 // ==========================================
 // PlasmaGuiNode: 独立的 ROS2 节点类
@@ -15,33 +17,87 @@ public:
     explicit PlasmaGuiNode(const std::string& name = "plasma_gui_node")
         : Node(name)
     {
-        // 创建订阅者
-        // 使用 rclcpp::SensorDataQoS() 以匹配传感器数据的 QoS 设置（通常是 Best Effort）
-        // 也可以根据实际情况调整 QoS
         auto qos = rclcpp::SensorDataQoS();
-        
-        m_subscription = this->create_subscription<sensor_msgs::msg::PointCloud2>(
+
+        // 1) 点云订阅
+        m_cloudSub = this->create_subscription<sensor_msgs::msg::PointCloud2>(
             "/camera/depth/color/points",
             qos,
-            std::bind(&PlasmaGuiNode::topic_callback, this, std::placeholders::_1)
+            std::bind(&PlasmaGuiNode::cloud_callback, this, std::placeholders::_1)
         );
+
+        // 2) 关节状态订阅（Realman Eco65-B，6 轴）
+        m_jointSub = this->create_subscription<sensor_msgs::msg::JointState>(
+            "/joint_states",
+            rclcpp::SensorDataQoS(),
+            std::bind(&PlasmaGuiNode::joint_callback, this, std::placeholders::_1)
+        );
+
+        // 3) 自检状态服务客户端
+        m_selfCheckClient = this->create_client<std_srvs::srv::Trigger>("/arm_self_check");
     }
 
-    // 设置回调函数接口，用于将数据传出到 Qt 世界
-    void setCallback(std::function<void(const sensor_msgs::msg::PointCloud2::ConstSharedPtr&)> callback) {
-        m_callback = callback;
+    // ---- 回调接口（Qt 世界） ----
+    void setCloudCallback(std::function<void(const sensor_msgs::msg::PointCloud2::ConstSharedPtr&)> cb) {
+        m_cloudCb = cb;
+    }
+    void setJointCallback(std::function<void(const sensor_msgs::msg::JointState::ConstSharedPtr&)> cb) {
+        m_jointCb = cb;
+    }
+
+    // 异步调用自检服务
+    void callSelfCheck(std::function<void(bool, const std::string&)> doneCb) {
+        auto request = std::make_shared<std_srvs::srv::Trigger::Request>();
+        m_selfCheckClient->async_send_request(request,
+            [this, doneCb](rclcpp::Client<std_srvs::srv::Trigger>::SharedFuture future) {
+                try {
+                    auto resp = future.get();
+                    if (doneCb) doneCb(resp->success, resp->message);
+                } catch (const std::exception &e) {
+                    if (doneCb) doneCb(false, std::string("Service call failed: ") + e.what());
+                }
+            });
+    }
+
+    // 异步发送急停服务
+    void callEmergencyStop(std::function<void(bool, const std::string&)> doneCb) {
+        if (!m_emergencyStopClient) {
+            m_emergencyStopClient = this->create_client<std_srvs::srv::Trigger>("/arm_emergency_stop");
+        }
+        auto request = std::make_shared<std_srvs::srv::Trigger::Request>();
+        m_emergencyStopClient->async_send_request(request,
+            [doneCb](rclcpp::Client<std_srvs::srv::Trigger>::SharedFuture future) {
+                try {
+                    auto resp = future.get();
+                    if (doneCb) doneCb(resp->success, resp->message);
+                } catch (const std::exception &e) {
+                    if (doneCb) doneCb(false, std::string("Service call failed: ") + e.what());
+                }
+            });
     }
 
 private:
-    void topic_callback(const sensor_msgs::msg::PointCloud2::ConstSharedPtr msg) const
-    {
-        if (m_callback) {
-            m_callback(msg);
-        }
+    // ---- 点云回调 ----
+    void cloud_callback(const sensor_msgs::msg::PointCloud2::ConstSharedPtr msg) const {
+        if (m_cloudCb) m_cloudCb(msg);
     }
 
-    rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr m_subscription;
-    std::function<void(const sensor_msgs::msg::PointCloud2::ConstSharedPtr&)> m_callback;
+    // ---- 关节状态回调 ----
+    void joint_callback(const sensor_msgs::msg::JointState::ConstSharedPtr msg) const {
+        if (m_jointCb) m_jointCb(msg);
+    }
+
+    // ---- 订阅 ----
+    rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr m_cloudSub;
+    rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr  m_jointSub;
+
+    // ---- 服务客户端 ----
+    rclcpp::Client<std_srvs::srv::Trigger>::SharedPtr m_selfCheckClient;
+    rclcpp::Client<std_srvs::srv::Trigger>::SharedPtr m_emergencyStopClient;
+
+    // ---- Qt 回调 ----
+    std::function<void(const sensor_msgs::msg::PointCloud2::ConstSharedPtr&)> m_cloudCb;
+    std::function<void(const sensor_msgs::msg::JointState::ConstSharedPtr&)>  m_jointCb;
 };
 
 // ==========================================
@@ -52,7 +108,6 @@ class RosWorker : public QObject
     Q_OBJECT
 public:
     explicit RosWorker(QObject *parent = nullptr) : QObject(parent) {
-        // 初始化 ROS2 上下文（如果尚未初始化）
         if (!rclcpp::ok()) {
             int argc = 0;
             char **argv = nullptr;
@@ -66,23 +121,25 @@ public:
         }
     }
 
+    /// 获取底层节点指针，供外部直接调用服务
+    std::shared_ptr<PlasmaGuiNode> node() const { return m_node; }
+
 public slots:
     void start() {
-        // 1. 创建节点
         m_node = std::make_shared<PlasmaGuiNode>();
 
-        // 2. 设置回调：收到 ROS 消息后发射 Qt 信号
-        m_node->setCallback([this](const sensor_msgs::msg::PointCloud2::ConstSharedPtr& msg) {
+        // 点云数据
+        m_node->setCloudCallback([this](const sensor_msgs::msg::PointCloud2::ConstSharedPtr& msg) {
             emit cloudReceived(msg);
         });
 
-        // 3. 创建多线程执行器
-        // 允许并行处理回调（如果节点中有多个订阅者或回调组）
+        // 关节状态数据
+        m_node->setJointCallback([this](const sensor_msgs::msg::JointState::ConstSharedPtr& msg) {
+            emit jointStateReceived(msg);
+        });
+
         m_executor = std::make_shared<rclcpp::executors::MultiThreadedExecutor>();
         m_executor->add_node(m_node);
-
-        // 4. 开始阻塞运行 (Spin)
-        // 注意：此函数会阻塞当前线程（即 m_workerThread），直到 rclcpp::shutdown 被调用
         m_executor->spin();
     }
 
@@ -94,6 +151,7 @@ public slots:
 
 signals:
     void cloudReceived(const sensor_msgs::msg::PointCloud2::ConstSharedPtr& msg);
+    void jointStateReceived(const sensor_msgs::msg::JointState::ConstSharedPtr& msg);
 
 private:
     std::shared_ptr<PlasmaGuiNode> m_node;

@@ -1,10 +1,17 @@
 #include "serial.h"
+#include "plasma_controller_protocol.h"
 #include <QMessageBox>
 #include <QDebug>
 #include <QDateTime>
+#include <QComboBox>
 #include <QInputDialog>
 #include <QOperatingSystemVersion>
+#include <QPushButton>
+#include <QSignalBlocker>
 #include <QShowEvent>
+#include <QSpinBox>
+#include <QTabWidget>
+#include <QVBoxLayout>
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -54,6 +61,18 @@ QString buildOpenPortErrorMessage(const QString &portName, const QSerialPort *se
     return message;
 }
 
+QString formatControlFrames(const QByteArray &frames)
+{
+    QString text;
+    for (int i = 0; i < frames.size(); ++i) {
+        text += QString("%1").arg(static_cast<quint8>(frames.at(i)), 2, 16, QChar('0')).toUpper();
+        if (i + 1 < frames.size()) {
+            text += ((i + 1) % PlasmaControllerProtocol::kCommandSize == 0) ? '\n' : ' ';
+        }
+    }
+    return text;
+}
+
 } // namespace
 
 /**
@@ -65,6 +84,7 @@ Serial::Serial(QWidget *parent)
     , ui(new Ui::Serial)
     , m_serialPort(nullptr)
     , m_statusTimer(nullptr)
+    , m_handshakeTimer(nullptr)
     , m_baudRate(115200)
     , m_dataBits(QSerialPort::Data8)
     , m_parity(QSerialPort::NoParity)
@@ -73,6 +93,8 @@ Serial::Serial(QWidget *parent)
     , m_bytesReceived(0)
     , m_bytesSent(0)
     , m_isConnected(false)
+    , m_handshakeComplete(false)
+    , m_handshakeAttempts(0)
     , m_logModeEnabled(false)
     , m_heliumPressure(0)
     , m_argonPressure(0)
@@ -80,6 +102,7 @@ Serial::Serial(QWidget *parent)
     , m_instantSendTimer(new QTimer(this))
 {
     ui->setupUi(this);
+    setupPageLayout();
     
     // 暗色标题栏将在窗口显示后设置
     
@@ -110,7 +133,7 @@ Serial::~Serial()
  */
 bool Serial::isConnected() const
 {
-    return m_isConnected;
+    return m_isConnected && m_handshakeComplete;
 }
 
 /**
@@ -118,7 +141,51 @@ bool Serial::isConnected() const
  */
 QString Serial::getCurrentPortName() const
 {
-    return m_portName;
+    if (m_isConnected || !m_portName.isEmpty())
+        return m_portName;
+    return ui->portComboBox->currentData().toString();
+}
+
+void Serial::setupPageLayout()
+{
+    ui->mainLayout->removeItem(ui->leftLayout);
+    ui->mainLayout->removeItem(ui->rightLayout);
+    ui->leftLayout->removeWidget(ui->plasmaControlGroupBox);
+
+    auto *tabWidget = new QTabWidget(this);
+    tabWidget->setObjectName(QStringLiteral("serialTabWidget"));
+
+    auto *serialPage = new QWidget(tabWidget);
+    auto *serialPageLayout = new QVBoxLayout(serialPage);
+    serialPageLayout->setContentsMargins(0, 0, 0, 0);
+    serialPageLayout->addLayout(ui->rightLayout);
+    tabWidget->addTab(serialPage, QStringLiteral("串口收发"));
+
+    auto *controllerPage = new QWidget(tabWidget);
+    auto *controllerPageLayout = new QVBoxLayout(controllerPage);
+    controllerPageLayout->setContentsMargins(8, 8, 8, 8);
+    ui->plasmaControlGroupBox->setMinimumWidth(0);
+    ui->plasmaControlGroupBox->setMaximumWidth(QWIDGETSIZE_MAX);
+    controllerPageLayout->addWidget(ui->plasmaControlGroupBox);
+    tabWidget->addTab(controllerPage, QStringLiteral("控制板"));
+
+    ui->leftLayout->addWidget(tabWidget, 1);
+    ui->mainLayout->addLayout(ui->leftLayout, 1);
+    ui->mainLayout->setStretch(0, 1);
+}
+
+qint32 Serial::getCurrentBaudRate() const
+{
+    return m_isConnected ? m_baudRate : ui->baudRateComboBox->currentText().toInt();
+}
+
+QString Serial::getCurrentFrameFormat() const
+{
+    return QStringLiteral("%1 / %2 / %3 / %4")
+        .arg(ui->dataBitsComboBox->currentText(),
+             ui->parityComboBox->currentText(),
+             ui->stopBitsComboBox->currentText(),
+             ui->flowControlComboBox->currentText());
 }
 
 /**
@@ -140,6 +207,9 @@ void Serial::setupUI()
     ui->heliumValveCheckBox->setStyleSheet(redStyle);
     ui->argonFlowMeterCheckBox->setStyleSheet(redStyle);
     ui->argonValveCheckBox->setStyleSheet(redStyle);
+    ui->controlAuxFanCheckBox->setStyleSheet(redStyle);
+    ui->deviceFanCheckBox->setStyleSheet(redStyle);
+    ui->controlMainFanCheckBox->setStyleSheet(redStyle);
     
     // 设置十六进制显示和日志模式按钮的初始选中状态
     ui->hexReceiveCheckBox->setChecked(true);
@@ -155,7 +225,7 @@ void Serial::setupUI()
     ui->sendButton->setEnabled(false);
     ui->sendButton->setStyleSheet("QPushButton { background-color: #666666; color: #999999; }");
     
-    // 启动即时发送定时器
+    // 即时控制命令只会在控制板握手完成后发送。
     m_instantSendTimer->start();
 }
 
@@ -170,6 +240,11 @@ void Serial::initSerialPort()
     m_statusTimer = new QTimer(this);
     m_statusTimer->setInterval(1000); // 每秒更新一次
     connect(m_statusTimer, &QTimer::timeout, this, &Serial::updateStatusInfo);
+
+    m_handshakeTimer = new QTimer(this);
+    m_handshakeTimer->setSingleShot(true);
+    m_handshakeTimer->setInterval(1000);
+    connect(m_handshakeTimer, &QTimer::timeout, this, &Serial::onHandshakeTimeout);
 }
 
 /**
@@ -188,6 +263,19 @@ void Serial::connectSignals()
     connect(ui->sendButton, &QPushButton::clicked, this, &Serial::sendData);
     connect(ui->clearReceiveButton, &QPushButton::clicked, this, &Serial::clearReceiveArea);
     connect(ui->clearSendButton, &QPushButton::clicked, this, &Serial::clearSendArea);
+
+    const QList<QComboBox *> settingBoxes = {
+        ui->portComboBox,
+        ui->baudRateComboBox,
+        ui->dataBitsComboBox,
+        ui->parityComboBox,
+        ui->stopBitsComboBox,
+        ui->flowControlComboBox
+    };
+    for (QComboBox *box : settingBoxes) {
+        connect(box, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                this, [this]() { emit settingsChanged(); });
+    }
     
     // 日志模式复选框信号连接
     connect(ui->logModeCheckBox, &QCheckBox::toggled, [this](bool checked) {
@@ -211,6 +299,12 @@ void Serial::connectSignals()
     connect(ui->argonFlowMeterCheckBox, &QCheckBox::toggled, this, &Serial::updateControlPacketDisplay);
     connect(ui->argonValveCheckBox, &QCheckBox::toggled, this, &Serial::updateControlPacketDisplay);
     connect(ui->argonValueSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &Serial::updateControlPacketDisplay);
+    connect(ui->controlAuxFanCheckBox, &QCheckBox::toggled, this, &Serial::updateControlPacketDisplay);
+    connect(ui->deviceFanCheckBox, &QCheckBox::toggled, this, &Serial::updateControlPacketDisplay);
+    connect(ui->controlMainFanCheckBox, &QCheckBox::toggled, this, &Serial::updateControlPacketDisplay);
+    connect(ui->controlAuxFanSpeedSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &Serial::updateControlPacketDisplay);
+    connect(ui->deviceFanSpeedSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &Serial::updateControlPacketDisplay);
+    connect(ui->controlMainFanSpeedSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &Serial::updateControlPacketDisplay);
     
     // UI联动信号连接
     connect(this, &Serial::deviceStatusUpdated, this, &Serial::updateDeviceStatus);
@@ -239,6 +333,7 @@ void Serial::refreshPortList()
     } else {
         ui->connectButton->setEnabled(true);
     }
+    emit settingsChanged();
 }
 
 /**
@@ -260,10 +355,13 @@ void Serial::toggleConnection()
         
         if (m_serialPort->open(QIODevice::ReadWrite)) {
             m_isConnected = true;
+            m_handshakeComplete = false;
+            m_handshakeAttempts = 0;
+            m_receiveBuffer.clear();
             ui->connectButton->setText("断开");
             ui->connectButton->setStyleSheet("QPushButton { background-color: #ff6b6b; }");
-            ui->statusLabel->setText("状态: 已连接");
-            ui->statusLabel->setStyleSheet("color: #4CAF50;");
+            ui->statusLabel->setText("状态: 串口已打开，正在握手");
+            ui->statusLabel->setStyleSheet("color: #FFC107;");
             
             // 禁用参数设置控件
             ui->portComboBox->setEnabled(false);
@@ -274,14 +372,21 @@ void Serial::toggleConnection()
             ui->flowControlComboBox->setEnabled(false);
             
             m_statusTimer->start();
-            emit connectionStatusChanged(true);
+            emit connectionStatusChanged(false);
+            sendHandshake();
         } else {
-            QMessageBox::critical(this, "错误", buildOpenPortErrorMessage(m_portName, m_serialPort));
+            const QString errorMessage = buildOpenPortErrorMessage(m_portName, m_serialPort);
+            emit serialErrorOccurred(errorMessage);
+            QMessageBox::critical(this, "错误", errorMessage);
         }
     } else {
         // 断开串口
         m_serialPort->close();
         m_isConnected = false;
+        m_handshakeComplete = false;
+        m_handshakeAttempts = 0;
+        m_handshakeTimer->stop();
+        m_receiveBuffer.clear();
         ui->connectButton->setText("连接");
         ui->connectButton->setStyleSheet("");
         ui->statusLabel->setText("状态: 未连接");
@@ -309,6 +414,10 @@ void Serial::sendData()
 {
     if (!m_isConnected) {
         QMessageBox::warning(this, "警告", "串口未连接！");
+        return;
+    }
+    if (!m_handshakeComplete) {
+        QMessageBox::warning(this, "警告", "控制板握手尚未完成，暂不发送控制命令。");
         return;
     }
     
@@ -339,10 +448,13 @@ void Serial::sendData()
     qint64 bytesWritten = m_serialPort->write(data);
     if (bytesWritten != -1) {
         m_bytesSent += bytesWritten;
+        emit dataSent(data.left(bytesWritten));
+        emit statisticsUpdated(m_bytesReceived, m_bytesSent);
         if (ui->autoClearSendCheckBox->isChecked()) {
             ui->sendTextEdit->clear();
         }
     } else {
+        emit serialErrorOccurred(QStringLiteral("数据发送失败"));
         QMessageBox::critical(this, "错误", "数据发送失败！");
     }
 }
@@ -354,6 +466,7 @@ void Serial::clearReceiveArea()
 {
     ui->receiveTextEdit->clear();
     m_bytesReceived = 0;
+    emit statisticsUpdated(m_bytesReceived, m_bytesSent);
 }
 
 /**
@@ -417,6 +530,7 @@ void Serial::onDataReceived()
     ui->receiveTextEdit->setTextCursor(cursor);
     
     emit dataReceived(data);
+    emit statisticsUpdated(m_bytesReceived, m_bytesSent);
 }
 
 /**
@@ -426,6 +540,7 @@ void Serial::onSerialError(QSerialPort::SerialPortError error)
 {
     if (error != QSerialPort::NoError) {
         QString errorString = m_serialPort->errorString();
+        emit serialErrorOccurred(errorString);
         ui->statusLabel->setText(QString("错误: %1").arg(errorString));
         ui->statusLabel->setStyleSheet("color: #f44336;");
         
@@ -442,6 +557,61 @@ void Serial::onSerialError(QSerialPort::SerialPortError error)
 void Serial::updateConnectionStatus()
 {
     // 这个函数可以用来更新其他状态相关的UI元素
+}
+
+void Serial::sendHandshake()
+{
+    if (!m_isConnected || !m_serialPort->isOpen() || m_handshakeComplete) {
+        return;
+    }
+
+    const QByteArray request = PlasmaControllerProtocol::handshakeRequest();
+    const qint64 written = m_serialPort->write(request);
+    if (written != request.size()) {
+        const QString message = QStringLiteral("控制板握手发送失败：%1")
+                                    .arg(m_serialPort->errorString());
+        emit serialErrorOccurred(message);
+        ui->statusLabel->setText(QStringLiteral("状态: 握手发送失败"));
+        ui->statusLabel->setStyleSheet(QStringLiteral("color: #f44336;"));
+        return;
+    }
+
+    ++m_handshakeAttempts;
+    m_bytesSent += written;
+    emit dataSent(request);
+    emit statisticsUpdated(m_bytesReceived, m_bytesSent);
+    m_handshakeTimer->start();
+}
+
+void Serial::onHandshakeTimeout()
+{
+    constexpr int kMaximumAttempts = 3;
+    if (!m_isConnected || m_handshakeComplete) {
+        return;
+    }
+    if (m_handshakeAttempts < kMaximumAttempts) {
+        sendHandshake();
+        return;
+    }
+
+    const QString message = QStringLiteral("控制板握手超时，已尝试 %1 次")
+                                .arg(m_handshakeAttempts);
+    ui->statusLabel->setText(QStringLiteral("状态: 握手失败"));
+    ui->statusLabel->setStyleSheet(QStringLiteral("color: #f44336;"));
+    emit serialErrorOccurred(message);
+    emit connectionStatusChanged(false);
+}
+
+void Serial::handleHandshakeAck()
+{
+    if (m_handshakeComplete) {
+        return;
+    }
+    m_handshakeComplete = true;
+    m_handshakeTimer->stop();
+    ui->statusLabel->setText(QStringLiteral("状态: 控制板已连接"));
+    ui->statusLabel->setStyleSheet(QStringLiteral("color: #4CAF50;"));
+    emit connectionStatusChanged(true);
 }
 
 /**
@@ -511,20 +681,14 @@ void Serial::updateStatusInfo()
  */
 void Serial::sendControlPacket()
 {
-    QByteArray packet = buildControlPacket();
-    
-    // 将数据包转换为十六进制字符串显示在发送区
-    QString hexString;
-    for (int i = 0; i < packet.size(); ++i) {
-        hexString += QString("%1 ").arg(static_cast<quint8>(packet[i]), 2, 16, QChar('0')).toUpper();
-    }
-    ui->sendTextEdit->setPlainText(hexString.trimmed());
+    const QByteArray packets = buildControlPacketBundle();
+    ui->sendTextEdit->setPlainText(formatControlFrames(packets));
     
     // 设置为十六进制发送模式
     ui->hexSendCheckBox->setChecked(true);
     
-    if (!m_isConnected) {
-        QMessageBox::warning(this, "警告", "串口未连接！数据包已生成并显示在发送区。");
+    if (!m_isConnected || !m_handshakeComplete) {
+        QMessageBox::warning(this, "警告", "控制板尚未连接或握手未完成，数据包仅生成未发送。");
         return;
     }
     
@@ -621,10 +785,16 @@ void Serial::resetSystem()
     ui->heliumValveCheckBox->setChecked(false);
     ui->argonFlowMeterCheckBox->setChecked(false);
     ui->argonValveCheckBox->setChecked(false);
+    ui->controlAuxFanCheckBox->setChecked(false);
+    ui->deviceFanCheckBox->setChecked(false);
+    ui->controlMainFanCheckBox->setChecked(false);
     
     ui->plasmaValueSpinBox->setValue(0);
     ui->heliumValueSpinBox->setValue(0);
     ui->argonValueSpinBox->setValue(0);
+    ui->controlAuxFanSpeedSpinBox->setValue(50);
+    ui->deviceFanSpeedSpinBox->setValue(50);
+    ui->controlMainFanSpeedSpinBox->setValue(50);
     
     // QMessageBox::information(this, "系统复位", "控制面板已重置到默认状态！");
 }
@@ -651,6 +821,15 @@ QByteArray Serial::buildControlPacket()
     }
     if (ui->voltageRelayCheckBox->isChecked()) {
         volRelay |= 0x01; // 低4位
+    }
+    if (ui->controlAuxFanCheckBox->isChecked()) {
+        volRelay |= 0x20;
+    }
+    if (ui->deviceFanCheckBox->isChecked()) {
+        volRelay |= 0x40;
+    }
+    if (ui->controlMainFanCheckBox->isChecked()) {
+        volRelay |= 0x80;
     }
     packet[3] = static_cast<char>(volRelay);
     
@@ -693,28 +872,31 @@ QByteArray Serial::buildControlPacket()
     quint16 header = (packet[1]<<8|packet[0]);
     quint8 emergencyStop = 0x00;
     
-    // 打印每个字节的值用于调试
-    qDebug() << "Packet bytes for checksum calculation:";
-    for (int i = 0; i < 12; ++i) {
-        qDebug() << QString("packet[%1] = 0x%2 (%3)").arg(i).arg(static_cast<quint8>(packet[i]), 2, 16, QChar('0')).toUpper().arg(static_cast<quint8>(packet[i]));
-    }
-    
     quint32 footer = static_cast<quint8>(packet[0]) + static_cast<quint8>(packet[1]) + static_cast<quint8>(packet[2]) + static_cast<quint8>(packet[3]) + static_cast<quint8>(packet[4]) + static_cast<quint8>(packet[5]) + static_cast<quint8>(packet[6]) + static_cast<quint8>(packet[7]) + static_cast<quint8>(packet[8]) + static_cast<quint8>(packet[9]) + static_cast<quint8>(packet[10]) + static_cast<quint8>(packet[11]);
-    qDebug() << "Calculated footer:" << footer << "(0x" << QString::number(footer, 16).toUpper() << ")";
-    // 打印数据包前12字节内容
-    QString packetHex;
-    for (int i = 0; i < 12; ++i) {
-        packetHex += QString("%1").arg(static_cast<quint8>(packet[i]), 2, 16, QChar('0')).toUpper();
-        if (i < 11) packetHex += " ";
-    }
-    qDebug() << "Packet[0-11]:" << packetHex;
-    qDebug() << "Footer (hex):" << QString("0x%1").arg(footer, 8, 16, QChar('0')).toUpper();
     packet[12] = footer & 0xFF;
     packet[13] = (footer >> 8) & 0xFF;
     packet[14] = (footer >> 16) & 0xFF;
     packet[15] = (footer >> 24) & 0xFF;
     
     return packet;
+}
+
+QByteArray Serial::buildFanControlPacket() const
+{
+    return PlasmaControllerProtocol::buildFanDutyCommand(
+        ui->controlAuxFanCheckBox->isChecked(),
+        static_cast<quint16>(ui->controlAuxFanSpeedSpinBox->value() * 10),
+        ui->deviceFanCheckBox->isChecked(),
+        static_cast<quint16>(ui->deviceFanSpeedSpinBox->value() * 10),
+        ui->controlMainFanCheckBox->isChecked(),
+        static_cast<quint16>(ui->controlMainFanSpeedSpinBox->value() * 10));
+}
+
+QByteArray Serial::buildControlPacketBundle()
+{
+    QByteArray packets = buildControlPacket();
+    packets.append(buildFanControlPacket());
+    return packets;
 }
 
 /**
@@ -733,23 +915,21 @@ quint32 Serial::calculateChecksum(const QByteArray &data)
 
 void Serial::updateControlPacketDisplay()
 {
-    QByteArray packet = buildControlPacket();
-    
-    // 在发送区显示生成的数据包
-    QString hexString;
-    for (int i = 0; i < packet.size(); ++i) {
-        hexString += QString("%1 ").arg((unsigned char)packet[i], 2, 16, QChar('0')).toUpper();
-    }
-    ui->sendTextEdit->setPlainText(hexString.trimmed());
+    const QByteArray packets = buildControlPacketBundle();
+    const QString hexString = formatControlFrames(packets);
+    ui->sendTextEdit->setPlainText(hexString);
     
     // 确保十六进制发送模式开启
     ui->hexSendCheckBox->setChecked(true);
     
     // 如果处于即时发送模式，立即发送数据包
-    if (m_instantSendMode && m_serialPort && m_serialPort->isOpen()) {
-        qint64 bytesWritten = m_serialPort->write(packet);
+    if (m_instantSendMode && m_handshakeComplete
+        && m_serialPort && m_serialPort->isOpen()) {
+        qint64 bytesWritten = m_serialPort->write(packets);
         if (bytesWritten != -1) {
             m_bytesSent += bytesWritten;
+            emit dataSent(packets.left(bytesWritten));
+            emit statisticsUpdated(m_bytesReceived, m_bytesSent);
             updateStatusInfo();
             
             // 在接收区显示发送的数据（如果启用了日志模式）
@@ -790,6 +970,11 @@ void Serial::setArgonControl(bool flowMeterEnabled, bool valveEnabled, int outpu
  */
 void Serial::setPlasmaControl(bool plasmaEnabled, bool voltageEnabled,bool if_ctl)
 {
+    const QSignalBlocker plasmaBlocker(ui->plasmaRelayCheckBox);
+    const QSignalBlocker voltageBlocker(ui->voltageRelayCheckBox);
+    const QSignalBlocker argonValueBlocker(ui->argonValueSpinBox);
+    const QSignalBlocker heliumValueBlocker(ui->heliumValueSpinBox);
+
     ui->plasmaRelayCheckBox->setChecked(plasmaEnabled);
     ui->voltageRelayCheckBox->setChecked(voltageEnabled);
     if(if_ctl)
@@ -797,8 +982,10 @@ void Serial::setPlasmaControl(bool plasmaEnabled, bool voltageEnabled,bool if_ct
         ui->argonValueSpinBox->setValue(0);
         ui->heliumValueSpinBox->setValue(0);
     }
-    
-    // updateControlPacketDisplay();
+
+    // Send one coherent frame. Emitting each checkbox signal separately can
+    // briefly energize only one of the two power relays during a transition.
+    updateControlPacketDisplay();
 }
 
 void Serial::showEvent(QShowEvent *event)
@@ -826,143 +1013,81 @@ void Serial::SetupDarkTitleBar()
  */
 void Serial::parseReceivedPacket(const QByteArray &data)
 {
-    // 查找数据包头 0xFEFF (小端序: FF FE)
-    int headerIndex = -1;
-    for (int i = 0; i <= data.size()-16; ++i) {
-        if (static_cast<quint8>(data[i]) == 0xFF && static_cast<quint8>(data[i + 1]) == 0xFE) {
-            headerIndex = i;
-            break;
+    Q_UNUSED(data);
+    const QByteArray header = QByteArray::fromHex("FFFE");
+
+    while (true) {
+        const int headerIndex = m_receiveBuffer.indexOf(header);
+        if (headerIndex < 0) {
+            // A trailing 0xFF may be the first byte of a split header.
+            const bool keepTrailingHeaderByte = !m_receiveBuffer.isEmpty()
+                && static_cast<quint8>(m_receiveBuffer.back()) == 0xFF;
+            m_receiveBuffer = keepTrailingHeaderByte
+                ? QByteArray(1, static_cast<char>(0xFF))
+                : QByteArray();
+            return;
         }
-    }
-    
-    if (headerIndex == -1) {
-        // 没有找到包头，保留末尾16个字节（可能包含不完整的包头），清除前面的数据
-        if (m_receiveBuffer.size() > 16) {
-            m_receiveBuffer = m_receiveBuffer.right(16);
-        }
-        return;
-    }
-    
-    // 检查是否有完整的18字节数据包
-    if (headerIndex + 18 > data.size()) {
-        // 数据包不完整，等待更多数据
-        // 移除包头之前的无效数据
+
         if (headerIndex > 0) {
             m_receiveBuffer.remove(0, headerIndex);
         }
-        return;
-    }
-    
-    // 提取完整的18字节数据包
-    QByteArray packet = data.mid(headerIndex, 18);
-    
-    // 验证校验和
-    if (verifyPacketChecksum(packet)) {
-        // 解析数据包内容
-        quint8 emerStop = static_cast<quint8>(packet[2]);
-        quint8 volRelay = static_cast<quint8>(packet[3]);
-        quint16 volOutValue = static_cast<quint8>(packet[4]) | (static_cast<quint8>(packet[5]) << 8);
-        
-        quint8 heFLOWRelay = static_cast<quint8>(packet[6]);
-        quint8 hePress = static_cast<quint8>(packet[7]);
-        quint16 heOutValue = static_cast<quint8>(packet[8]) | (static_cast<quint8>(packet[9]) << 8);
-        
-        quint8 arFLOWRelay = static_cast<quint8>(packet[10]);
-        quint8 arPress = static_cast<quint8>(packet[11]);
-        quint16 arOutValue = static_cast<quint8>(packet[12]) | (static_cast<quint8>(packet[13]) << 8);
-        
-        // 更新压力值
-        if (m_heliumPressure != hePress || m_argonPressure != arPress) {
-            m_heliumPressure = hePress;
-            m_argonPressure = arPress;
-            emit pressureValuesUpdated(m_heliumPressure, m_argonPressure);
+        if (m_receiveBuffer.size() < PlasmaControllerProtocol::kCommandSize) {
+            return;
         }
-        
-        // 发射设备状态更新信号
-        bool emerStopActive = (emerStop == 0xF8);
-        bool plasmaRelayActive = (volRelay & 0xF0) >> 4;  // 等离子电源（高4位）
-        bool volRelayActive = (volRelay & 0x0F);          // 调压器（低4位）
-        bool heFLOWRelayActive = (heFLOWRelay & 0xF0)>>4;  // 氦气流量计
-        bool heValveActive = (heFLOWRelay & 0x0F);      // 氦气电磁阀
-        bool arFLOWRelayActive = (arFLOWRelay & 0xF0)>>4;  // 氩气流量计
-        bool arValveActive = (arFLOWRelay & 0x0F);      // 氩气电磁阀
-        
-        // 更新UI控件状态
-        updateDeviceStatus(emerStopActive, plasmaRelayActive, volRelayActive, heFLOWRelayActive, heValveActive, arFLOWRelayActive, arValveActive);
-        
-        // 发射输出值更新信号
-        emit outputValuesUpdated(volOutValue, heOutValue, arOutValue);
-        
-        // 输出解析结果到调试信息
-        qDebug() << "数据包解析成功:";
-        qDebug() << "  紧急停止:" << (emerStop == 0xF8 ? "是" : "否");
-        qDebug() << "  等离子电源:" << ((volRelay & 0x10) ? "开" : "关");
-        qDebug() << "  调压器:" << ((volRelay & 0x01) ? "开" : "关");
-        qDebug() << "  等离子输出值:" << volOutValue;
-        qDebug() << "  氦气流量计:" << ((heFLOWRelay & 0x10) ? "开" : "关");
-        qDebug() << "  氦气电磁阀:" << ((heFLOWRelay & 0x01) ? "开" : "关");
-        qDebug() << "  氦气压力:" << hePress;
-        qDebug() << "  氦气输出值:" << heOutValue;
-        qDebug() << "  氩气流量计:" << ((arFLOWRelay & 0x10) ? "开" : "关");
-        qDebug() << "  氩气电磁阀:" << ((arFLOWRelay & 0x01) ? "开" : "关");
-        qDebug() << "  氩气压力:" << arPress;
-        qDebug() << "  氩气输出值:" << arOutValue;
-    } else {
-        qDebug() << "数据包校验和验证失败";
-    }
-    
-    // 移除已处理的数据包
-    m_receiveBuffer.remove(0, headerIndex + 18);
-    
-    // 如果缓冲区中还有数据，递归处理
-    if (m_receiveBuffer.size() >= 18) {
-        parseReceivedPacket(m_receiveBuffer);
-    }
-}
 
-/**
- * @brief 验证数据包校验和
- * @param packet 完整的16字节数据包
- * @return true-校验通过，false-校验失败
- */
-bool Serial::verifyPacketChecksum(const QByteArray &packet)
-{
-    if (packet.size() != 18) {
-        return false;
-    }
-    
-    // 按照下位机的方式计算校验和：各字段值相加
-    //FF FE 00 10 00 08 00 00 00 00 00 00 15 02 00 00
-    quint16 header = (static_cast<quint8>(packet[1]) << 8) | static_cast<quint8>(packet[0]);
-    quint8 emerStop = static_cast<quint8>(packet[2]);
-    quint8 volRelay = static_cast<quint8>(packet[3]);
-    quint16 volOutValue = (static_cast<quint8>(packet[5]) << 8) | static_cast<quint8>(packet[4]);
-    quint8 heFLOWRelay = static_cast<quint8>(packet[6]);
-    quint8 hePress = static_cast<quint8>(packet[7]);
-    quint16 heOutValue = (static_cast<quint8>(packet[9]) << 8) | static_cast<quint8>(packet[8]);
-    quint8 arFLOWRelay = static_cast<quint8>(packet[10]);
-    quint8 arPress = static_cast<quint8>(packet[11]);
-    quint16 arOutValue = (static_cast<quint8>(packet[13]) << 8) | static_cast<quint8>(packet[12]);
-    
-    quint32 calculatedChecksum = header + emerStop + volRelay + volOutValue + 
-                                heFLOWRelay + hePress + heOutValue + 
-                                arFLOWRelay + arPress + arOutValue;
-    
-    // 提取数据包中的footer校验和 (32位，小端序，位于字节14-17)
-    quint32 packetFooter = static_cast<quint8>(packet[14]) | 
-                          (static_cast<quint8>(packet[15]) << 8) |
-                          (static_cast<quint8>(packet[16]) << 16) |
-                          (static_cast<quint8>(packet[17]) << 24);
-    // 打印整个数据包为十六进制格式
-    QString hexString;
-    for (int i = 0; i < packet.size(); ++i) {
-        hexString += QString("%1 ").arg(static_cast<quint8>(packet[i]), 2, 16, QChar('0')).toUpper();
-    }
-    qDebug() << "Received packet:" << hexString.trimmed();
+        const QByteArray baseFrame =
+            m_receiveBuffer.left(PlasmaControllerProtocol::kCommandSize);
+        if (PlasmaControllerProtocol::isHandshakeAck(baseFrame)) {
+            m_receiveBuffer.remove(0, PlasmaControllerProtocol::kCommandSize);
+            handleHandshakeAck();
+            continue;
+        }
 
-    qDebug("calculatedChecksum: %2X , packetFooter: %2X",calculatedChecksum,packetFooter);
+        if (m_receiveBuffer.size() < PlasmaControllerProtocol::kStateSize) {
+            return;
+        }
 
-    return calculatedChecksum == packetFooter;
+        const QByteArray frame =
+            m_receiveBuffer.left(PlasmaControllerProtocol::kStateSize);
+        PlasmaControllerProtocol::State state;
+        QString error;
+        if (!PlasmaControllerProtocol::decodeState(frame, &state, &error)) {
+            qWarning() << "控制板状态包解析失败:" << error;
+            m_receiveBuffer.remove(0, 1);
+            continue;
+        }
+
+        const bool emergencyStopActive = state.emergencyStop != 0U;
+        const bool plasmaRelayActive = (state.voltageRelay & 0x10U) != 0U;
+        const bool voltageRelayActive = (state.voltageRelay & 0x01U) != 0U;
+        const bool controlAuxFanActive = (state.voltageRelay & 0x20U) != 0U;
+        const bool deviceFanActive = (state.voltageRelay & 0x40U) != 0U;
+        const bool controlMainFanActive = (state.voltageRelay & 0x80U) != 0U;
+        const bool heliumFlowRelayActive = (state.heliumRelay & 0x10U) != 0U;
+        const bool heliumValveActive = (state.heliumRelay & 0x01U) != 0U;
+        const bool argonFlowRelayActive = (state.argonRelay & 0x10U) != 0U;
+        const bool argonValveActive = (state.argonRelay & 0x01U) != 0U;
+
+        m_heliumPressure = state.heliumPressureMpa;
+        m_argonPressure = state.argonPressureMpa;
+        emit pressureValuesUpdated(m_heliumPressure, m_argonPressure);
+        emit plasmaFeedbackUpdated(state.plasmaFeedbackVpp);
+        emit deviceStatusUpdated(emergencyStopActive,
+                                 plasmaRelayActive,
+                                 voltageRelayActive,
+                                 heliumFlowRelayActive,
+                                 heliumValveActive,
+                                 argonFlowRelayActive,
+                                 argonValveActive,
+                                 controlAuxFanActive,
+                                 deviceFanActive,
+                                 controlMainFanActive);
+        emit outputValuesUpdated(state.voltageOutput,
+                                 state.heliumOutput,
+                                 state.argonOutput);
+
+        m_receiveBuffer.remove(0, PlasmaControllerProtocol::kStateSize);
+    }
 }
 
 /**
@@ -974,7 +1099,10 @@ bool Serial::verifyPacketChecksum(const QByteArray &packet)
  * @param arFLOWRelay 氩气流量计状态
  * @param arValve 氩气电磁阀状态
  */
-void Serial::updateDeviceStatus(bool emerStop, bool plasmaRelay, bool volRelay, bool heFLOWRelay, bool heValve, bool arFLOWRelay, bool arValve)
+void Serial::updateDeviceStatus(bool emerStop, bool plasmaRelay, bool volRelay,
+                                bool heFLOWRelay, bool heValve,
+                                bool arFLOWRelay, bool arValve,
+                                bool controlAuxFan, bool deviceFan, bool controlMainFan)
 {
     // 定义checkbox背景颜色样式
     QString greenStyle = "QCheckBox { background-color: #4CAF50; border-radius: 4px; padding: 2px; }";
@@ -985,6 +1113,10 @@ void Serial::updateDeviceStatus(bool emerStop, bool plasmaRelay, bool volRelay, 
     
     // 更新调压器继电器checkbox
     ui->voltageRelayCheckBox->setStyleSheet(volRelay ? greenStyle : redStyle);
+
+    ui->controlAuxFanCheckBox->setStyleSheet(controlAuxFan ? greenStyle : redStyle);
+    ui->deviceFanCheckBox->setStyleSheet(deviceFan ? greenStyle : redStyle);
+    ui->controlMainFanCheckBox->setStyleSheet(controlMainFan ? greenStyle : redStyle);
     
     // 更新氦气流量计checkbox
     ui->heliumFlowMeterCheckBox->setStyleSheet(heFLOWRelay ? greenStyle : redStyle);
@@ -1011,12 +1143,18 @@ void Serial::updateOutputValues(quint16 volOutValue, quint16 heOutValue, quint16
     ui->plasmaCurrentValueDisplay->setText(QString::number(volOutValue));
     
     // 更新氦气当前值显示
-    ui->heliumCurrentValueDisplay->setText(QString::number(heOutValue));
+    ui->heliumCurrentValueDisplay->setText(
+        QStringLiteral("%1 L/min (%2)")
+            .arg(heOutValue / 100.0, 0, 'f', 2)
+            .arg(heOutValue));
     // 发出氦气当前值变化信号
     emit heliumCurrentValueChanged(heOutValue);
     
     // 更新氩气当前值显示
-    ui->argonCurrentValueDisplay->setText(QString::number(arOutValue));
+    ui->argonCurrentValueDisplay->setText(
+        QStringLiteral("%1 L/min (%2)")
+            .arg(arOutValue / 100.0, 0, 'f', 2)
+            .arg(arOutValue));
     // 发出氩气当前值变化信号
     emit argonCurrentValueChanged(arOutValue);
 }

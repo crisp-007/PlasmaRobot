@@ -1,0 +1,325 @@
+schema_version: 1
+status: offline_candidate_only
+validated: false
+execution_allowed: false
+motion_commands_published: false
+source_dataset: /home/larusxu/Data/script/pointcloud_get/calibration/calib_data/handeye_l515_20260723_152410
+source_pnp_cache: src/third_party/plasma_robot/tools/eye_hand/records/handeye_pnp_samples_20260723.yaml
+current_calibration: src/third_party/plasma_robot/tools/eye_hand/config/camera_to_gripper.yaml
+algorithm: joint_SE3_Huber_IRLS_LM
+residual_scaling:
+  translation_mm: 3
+  rotation_deg: 0.5
+huber_delta: 1.5
+sample_count: 40
+minimum_retained_samples: 36
+current_matrix_metrics_all_samples:
+  translation_mm:
+    mean: 3.201586575508508
+    median: 2.949815752232808
+    max: 6.873322927202724
+  rotation_deg:
+    mean: 0.6649337153789447
+    median: 0.5813478575513897
+    max: 1.63473363316275
+selected_scenario: robust_trim_4
+excluded_samples:
+  - img_002.png
+  - img_008.png
+  - img_027.png
+  - img_038.png
+T_camera_to_gripper:
+  -
+    - -0.865072201446633
+    - -0.4997711357977914
+    - 0.04334625828907053
+    - -0.0398366343345716
+  -
+    - 0.5015723881040343
+    - -0.8632018333908155
+    - 0.05751290570255913
+    - -0.06170787284627138
+  -
+    - 0.008673279419758293
+    - 0.07149410223312877
+    - 0.9974033123917254
+    - 0.03296727015099634
+  -
+    - 0
+    - 0
+    - 0
+    - 1
+T_gripper_to_camera:
+  -
+    - -0.865072201446632
+    - 0.5015723881040339
+    - 0.008673279419758255
+    - -0.003796534159434184
+  -
+    - -0.4997711357977909
+    - -0.863201833390815
+    - 0.07149410223312877
+    - -0.07553251434582138
+  -
+    - 0.04334625828907051
+    - 0.05751290570255909
+    - 0.9974033123917254
+    - -0.0276058963357699
+  -
+    - -0
+    - 0
+    - -0
+    - 1
+delta_from_current:
+  translation_mm: 8.735544270678449
+  rotation_deg: 0.1383022553280543
+quality:
+  training_retained:
+    translation_mm:
+      mean: 2.069180671412678
+      median: 1.835584287663008
+      max: 4.870334803746958
+    rotation_deg:
+      mean: 0.5755513860996385
+      median: 0.483424031509071
+      max: 1.193101623133797
+  kfold_retained:
+    translation_mm:
+      mean: 2.192152573576055
+      median: 2.012153120692291
+      max: 5.172439146357161
+    rotation_deg:
+      mean: 0.5992748940045854
+      median: 0.5218786387267607
+      max: 1.25355269690916
+  score: 6.179634100381748
+  excluded_against_candidate:
+    translation_mm:
+      mean: 5.15953792114774
+      median: 4.722950892628028
+      max: 8.446428938958935
+    rotation_deg:
+      mean: 1.458679821354731
+      median: 1.499082335501709
+      max: 1.696508126474882
+scenarios:
+  - name: robust_trim_0
+    retained_samples: 40
+    excluded_samples:
+      []
+    training:
+      translation_mm:
+        mean: 2.396932560618887
+        median: 2.12748276363695
+        max: 7.874305560215038
+      rotation_deg:
+        mean: 0.6648354698337491
+        median: 0.56334337235927
+        max: 1.650413639512951
+    kfold:
+      translation_mm:
+        mean: 2.523016933955374
+        median: 2.294444178442903
+        max: 8.482224469792015
+      rotation_deg:
+        mean: 0.697968723036982
+        median: 0.5665602175868805
+        max: 1.733890154568666
+    score: 8.03455161039088
+    iterations: 6
+  - name: robust_trim_1
+    retained_samples: 39
+    excluded_samples:
+      - img_002.png
+    training:
+      translation_mm:
+        mean: 2.297113049749611
+        median: 2.091220612351766
+        max: 7.597950051429936
+      rotation_deg:
+        mean: 0.6374104623241489
+        median: 0.524872203978631
+        max: 1.52982929798796
+    kfold:
+      translation_mm:
+        mean: 2.394418722432011
+        median: 2.190065060155653
+        max: 8.160181463970511
+      rotation_deg:
+        mean: 0.6653499634727235
+        median: 0.5411522376493156
+        max: 1.679247532459842
+    score: 7.668295100481957
+    iterations: 5
+  - name: robust_trim_2
+    retained_samples: 38
+    excluded_samples:
+      - img_002.png
+      - img_008.png
+    training:
+      translation_mm:
+        mean: 2.106435550152011
+        median: 1.858629623001426
+        max: 4.968476237842246
+      rotation_deg:
+        mean: 0.6257053604129936
+        median: 0.5273259476094649
+        max: 1.475026459484809
+    kfold:
+      translation_mm:
+        mean: 2.212927057362536
+        median: 1.95826320731359
+        max: 5.134845282919962
+      rotation_deg:
+        mean: 0.6684262260973283
+        median: 0.5485278983400821
+        max: 1.664270656259197
+    score: 6.779785235928713
+    iterations: 5
+  - name: robust_trim_3
+    retained_samples: 37
+    excluded_samples:
+      - img_002.png
+      - img_008.png
+      - img_027.png
+    training:
+      translation_mm:
+        mean: 2.10309222901542
+        median: 1.817653538612332
+        max: 4.99524290498083
+      rotation_deg:
+        mean: 0.5981920855792783
+        median: 0.5079208703246573
+        max: 1.340324771441434
+    kfold:
+      translation_mm:
+        mean: 2.234332545611924
+        median: 1.975502200417911
+        max: 5.081261337802193
+      rotation_deg:
+        mean: 0.628232633616572
+        median: 0.532023562749917
+        max: 1.432888451074781
+    score: 6.45264595785125
+    iterations: 5
+  - name: robust_trim_4
+    retained_samples: 36
+    excluded_samples:
+      - img_002.png
+      - img_008.png
+      - img_027.png
+      - img_038.png
+    training:
+      translation_mm:
+        mean: 2.069180671412678
+        median: 1.835584287663008
+        max: 4.870334803746958
+      rotation_deg:
+        mean: 0.5755513860996385
+        median: 0.483424031509071
+        max: 1.193101623133797
+    kfold:
+      translation_mm:
+        mean: 2.192152573576055
+        median: 2.012153120692291
+        max: 5.172439146357161
+      rotation_deg:
+        mean: 0.5992748940045854
+        median: 0.5218786387267607
+        max: 1.25355269690916
+    score: 6.179634100381748
+    iterations: 5
+  - name: robust_trim_5
+    retained_samples: 35
+    excluded_samples:
+      - img_002.png
+      - img_008.png
+      - img_027.png
+      - img_038.png
+      - img_005.png
+    training:
+      translation_mm:
+        mean: 2.006553022902799
+        median: 1.724489392981079
+        max: 4.899142360591465
+      rotation_deg:
+        mean: 0.5606706986507541
+        median: 0.4875945440631746
+        max: 1.201995381951884
+    kfold:
+      translation_mm:
+        mean: 2.094186946093721
+        median: 1.82994210521271
+        max: 5.065291036718833
+      rotation_deg:
+        mean: 0.584903998104044
+        median: 0.5433767530972052
+        max: 1.268236752075121
+    score: 6.139128691067147
+    iterations: 5
+  - name: known_influence_3
+    retained_samples: 37
+    excluded_samples:
+      - img_008.png
+      - img_009.png
+      - img_016.png
+    training:
+      translation_mm:
+        mean: 2.209440842429848
+        median: 1.928393646681203
+        max: 5.623485421763082
+      rotation_deg:
+        mean: 0.6458713011534811
+        median: 0.5209828505296763
+        max: 1.637893252737414
+    kfold:
+      translation_mm:
+        mean: 2.348676171029551
+        median: 1.962849558342134
+        max: 5.79834332054135
+      rotation_deg:
+        mean: 0.6974363245471656
+        median: 0.5879386911900204
+        max: 1.755911695245017
+    score: 7.205189376556846
+    iterations: 7
+  - name: known_influence_5
+    retained_samples: 35
+    excluded_samples:
+      - img_002.png
+      - img_008.png
+      - img_009.png
+      - img_013.png
+      - img_016.png
+    training:
+      translation_mm:
+        mean: 2.073432049551863
+        median: 2.049800576473057
+        max: 4.810052243072816
+      rotation_deg:
+        mean: 0.6176218401650351
+        median: 0.5328211649581182
+        max: 1.438680643658185
+    kfold:
+      translation_mm:
+        mean: 2.16194440159055
+        median: 2.127050471273551
+        max: 4.801033765920632
+      rotation_deg:
+        mean: 0.6390861176741023
+        median: 0.5347793132680133
+        max: 1.494416147917577
+    score: 6.684268251209155
+    iterations: 5
+acceptance:
+  accepted: false
+  checks:
+    minimum_retained_samples: true
+    fixed_board_translation: true
+    fixed_board_rotation: true
+    kfold_translation: true
+    kfold_rotation: false
+  reason: candidate remains disabled until every offline check and an independent blind entry validation pass
+known_systematic:
+  depth_vs_pnp_signed_offset_mm: -9.502643000000001
+  note: this hand-eye candidate cannot by itself remove the measured L515 depth/PnP offset

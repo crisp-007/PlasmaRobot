@@ -1,0 +1,665 @@
+schema_version: 1
+status: offline_candidate_only
+validated: false
+execution_allowed: false
+motion_commands_published: false
+camera_parameters_modified: false
+source_dataset: /home/larusxu/CodeSpace/PlasmaRobot/src/third_party/plasma_robot/tools/eye_hand/records/depth_alignment_20260727/dataset.yaml
+algorithm: joint_depth_scale_ray_bias_SE3_Huber_LM
+model:
+  depth_point: "[x,y,1]*(raw*unit*scale) + normalize([x,y,1])*ray_bias"
+  color_point: SE3_correction * T_color_from_depth_factory * depth_point
+  residual: signed point-to-ChArUco-PnP-plane distance
+sample_count: 9
+ray_count: 7200
+raw_depth_unit_hint_m: 0.001
+baseline_factory:
+  point_count: 7200
+  mean_signed_mm: -14.57008619100961
+  median_signed_mm: -15.06806450196248
+  mean_abs_mm: 14.57588453675518
+  median_abs_mm: 15.06806450196248
+  rms_mm: 15.097818419602
+  max_abs_mm: 25.50731065828639
+diagnostics:
+  factory_rotation_storage: verified column-major from rs2_extrinsics and ROS driver pass-through
+  transposed_factory_rotation_not_candidate:
+    point_count: 7200
+    mean_signed_mm: -13.61796283326843
+    median_signed_mm: -14.0779869573304
+    mean_abs_mm: 13.6187300434223
+    median_abs_mm: 14.0779869573304
+    rms_mm: 13.78895858852054
+    max_abs_mm: 21.01287564542852
+candidate:
+  depth_scale_factor: 0.9966686939923388
+  depth_unit_m_per_raw: 0.0009966686939923389
+  ray_bias_mm: -2.116577533843889
+  T_color_from_depth_factory:
+    -
+      - 0.9999249577522278
+      - -0.01007519755512476
+      - 0.006965124513953924
+      - 0.0008318761247210205
+    -
+      - 0.01015310361981392
+      - 0.9998852610588074
+      - -0.01124177780002356
+      - -0.01372158154845238
+    -
+      - -0.006851062178611755
+      - 0.01131165213882923
+      - 0.9999125599861145
+      - 0.004786634352058172
+    -
+      - 0
+      - 0
+      - 0
+      - 1
+  T_factory_correction:
+    -
+      - 0.9994203956955324
+      - 0.02966446682554937
+      - -0.01670006214781647
+      - 0.01758127915003533
+    -
+      - -0.02962607659668021
+      - 0.9995578202078829
+      - 0.002541583512636669
+      - 0.02422416184519467
+    -
+      - 0.01676807243760259
+      - -0.002045353079532122
+      - 0.9998573139591006
+      - -0.002022026642354099
+    -
+      - 0
+      - 0
+      - 0
+      - 1
+  T_color_from_depth_candidate:
+    -
+      - 0.9997609965122378
+      - 0.01940279993506839
+      - -0.01007099574095489
+      - 0.0179256926239773
+    -
+      - -0.01949265181341096
+      - 0.9997703700850029
+      - -0.008901794948869694
+      - 0.01049616810797918
+    -
+      - 0.009895962814326937
+      - 0.009095978083656611
+      - 0.9999096715389141
+      - 0.002805939161993758
+    -
+      - 0
+      - 0
+      - 0
+      - 1
+  correction_translation_mm: 29.9999997566007
+  correction_rotation_deg: 1.955275165778122
+  fit_iterations: 31
+  fit_converged: true
+  normal_condition_number: 4420684946.403988
+  all_samples:
+    point_count: 7200
+    mean_signed_mm: -5.596430930339411
+    median_signed_mm: -5.998993581780637
+    mean_abs_mm: 5.741098145875882
+    median_abs_mm: 6.005227465537027
+    rms_mm: 6.237469137317771
+    max_abs_mm: 14.55072695703659
+per_sample:
+  - name: sample_01
+    target: 近距离约 0.35 m，画面中央，板面基本正对相机
+    corners: 48
+    reprojection_px: 0.2062439322471619
+    board_distance_m: 0.3976669288948678
+    color_depth_stamp_delta_ms: 0
+    median_depth_frames: 13
+    ray_count: 800
+    baseline:
+      point_count: 800
+      mean_signed_mm: -17.05052353279872
+      median_signed_mm: -17.05038142729956
+      mean_abs_mm: 17.05052353279872
+      median_abs_mm: 17.05038142729956
+      rms_mm: 17.1054463759955
+      max_abs_mm: 20.60650692082244
+    candidate_all_fit:
+      point_count: 800
+      mean_signed_mm: -7.409469680264306
+      median_signed_mm: -7.42486050861093
+      mean_abs_mm: 7.409469680264306
+      median_abs_mm: 7.42486050861093
+      rms_mm: 7.514171312975272
+      max_abs_mm: 10.75178498881025
+    held_out:
+      point_count: 800
+      mean_signed_mm: -7.505752155934598
+      median_signed_mm: -7.491780210229353
+      mean_abs_mm: 7.505752155934598
+      median_abs_mm: 7.491780210229353
+      rms_mm: 7.617398215109501
+      max_abs_mm: 10.93516315896313
+    plane_diagnostic:
+      depth_self_fit:
+        point_count: 800
+        mean_signed_mm: -2.72365680356601e-13
+        median_signed_mm: -0.01214375236866937
+        mean_abs_mm: 0.626746203519424
+        median_abs_mm: 0.4708186109203449
+        rms_mm: 0.8502921090456498
+        max_abs_mm: 4.550883083911826
+      normal_difference_deg: 1.945083380501043
+      depth_normal_color: [0.07348376291039127, 0.1123099612358412, -0.9909523748373246]
+      pnp_normal_color: [0.07938216136053676, 0.07899373550079516, -0.9937094455671437]
+      depth_centroid_color_m: [-0.06776466918430113, 0.03427533781115688, 0.3694471310722527]
+  - name: sample_02
+    target: 近距离约 0.35 m，画面左侧，板面轻微向右倾斜
+    corners: 48
+    reprojection_px: 0.1661906838417053
+    board_distance_m: 0.4473982804283566
+    color_depth_stamp_delta_ms: 305.6800365447998
+    median_depth_frames: 15
+    ray_count: 800
+    baseline:
+      point_count: 800
+      mean_signed_mm: -15.77429489891677
+      median_signed_mm: -15.67232302947605
+      mean_abs_mm: 15.77429489891677
+      median_abs_mm: 15.67232302947605
+      rms_mm: 15.94137990977349
+      max_abs_mm: 21.37179359429162
+    candidate_all_fit:
+      point_count: 800
+      mean_signed_mm: -5.402459591563618
+      median_signed_mm: -5.403378507688288
+      mean_abs_mm: 5.438424351468386
+      median_abs_mm: 5.403378507688288
+      rms_mm: 5.819714046245354
+      max_abs_mm: 10.11790096240399
+    held_out:
+      point_count: 800
+      mean_signed_mm: 2.0077240770672
+      median_signed_mm: 1.461264745414898
+      mean_abs_mm: 2.040013831717661
+      median_abs_mm: 1.461264745414898
+      rms_mm: 2.780016249274417
+      max_abs_mm: 13.04886889244762
+    plane_diagnostic:
+      depth_self_fit:
+        point_count: 800
+        mean_signed_mm: 1.220594805784181e-14
+        median_signed_mm: -0.446808402656334
+        mean_abs_mm: 1.383923999421522
+        median_abs_mm: 1.045152698326681
+        rms_mm: 1.905710836133452
+        max_abs_mm: 10.73268935198269
+      normal_difference_deg: 2.196230038726206
+      depth_normal_color: [0.09279595036267854, 0.1078435820971255, -0.98982759781527]
+      pnp_normal_color: [0.09758572801460333, 0.06992873366966051, -0.9927673432860378]
+      depth_centroid_color_m: [-0.1001513014707003, 0.04715308266918479, 0.4106873335391197]
+  - name: sample_03
+    target: 近距离约 0.35 m，画面右侧，板面轻微向下倾斜
+    corners: 48
+    reprojection_px: 0.2003703862428665
+    board_distance_m: 0.4247666299902486
+    color_depth_stamp_delta_ms: 33.1718921661377
+    median_depth_frames: 13
+    ray_count: 800
+    baseline:
+      point_count: 800
+      mean_signed_mm: -14.00328121789263
+      median_signed_mm: -14.13070638139922
+      mean_abs_mm: 14.00328121789263
+      median_abs_mm: 14.13070638139922
+      rms_mm: 14.09506569394064
+      max_abs_mm: 19.43949490660983
+    candidate_all_fit:
+      point_count: 800
+      mean_signed_mm: -5.962227293212474
+      median_signed_mm: -5.946754594130607
+      mean_abs_mm: 5.962227293212474
+      median_abs_mm: 5.946754594130607
+      rms_mm: 6.086416168787022
+      max_abs_mm: 10.53067157779471
+    held_out:
+      point_count: 800
+      mean_signed_mm: -6.00486023111344
+      median_signed_mm: -5.904327874625743
+      mean_abs_mm: 6.00486023111344
+      median_abs_mm: 5.904327874625743
+      rms_mm: 6.123633436329761
+      max_abs_mm: 10.41744632554482
+    plane_diagnostic:
+      depth_self_fit:
+        point_count: 800
+        mean_signed_mm: 3.067858467264983e-14
+        median_signed_mm: -0.02848047821544402
+        mean_abs_mm: 0.6213678125150399
+        median_abs_mm: 0.5024579910379351
+        rms_mm: 0.7930857154124203
+        max_abs_mm: 2.595370077982974
+      normal_difference_deg: 2.179966458189561
+      depth_normal_color: [0.0402566838593665, 0.1259905513082404, -0.9912142958945319]
+      pnp_normal_color: [0.05722135338983182, 0.09206016186132729, -0.9941079636107449]
+      depth_centroid_color_m: [0.01551618286943123, -0.04131830491321438, 0.4246633417408324]
+  - name: sample_04
+    target: 中距离约 0.50 m，画面中央，板面轻微向左倾斜
+    corners: 48
+    reprojection_px: 0.1602377444505692
+    board_distance_m: 0.5270331657725648
+    color_depth_stamp_delta_ms: 0
+    median_depth_frames: 13
+    ray_count: 800
+    baseline:
+      point_count: 800
+      mean_signed_mm: -17.44483646652537
+      median_signed_mm: -17.35844424074004
+      mean_abs_mm: 17.44483646652537
+      median_abs_mm: 17.35844424074004
+      rms_mm: 17.57466035503597
+      max_abs_mm: 22.27958220443176
+    candidate_all_fit:
+      point_count: 800
+      mean_signed_mm: -7.354163490519226
+      median_signed_mm: -7.400230923830239
+      mean_abs_mm: 7.354163490519226
+      median_abs_mm: 7.400230923830239
+      rms_mm: 7.553280553510992
+      max_abs_mm: 11.41024014122926
+    held_out:
+      point_count: 800
+      mean_signed_mm: -7.66174443447269
+      median_signed_mm: -7.686588542030252
+      mean_abs_mm: 7.66174443447269
+      median_abs_mm: 7.686588542030252
+      rms_mm: 7.863014258640104
+      max_abs_mm: 11.82822832712356
+    plane_diagnostic:
+      depth_self_fit:
+        point_count: 800
+        mean_signed_mm: -3.929365513521965e-14
+        median_signed_mm: -0.02326471828190731
+        mean_abs_mm: 0.4561207028922299
+        median_abs_mm: 0.3852182063172669
+        rms_mm: 0.5782650514809953
+        max_abs_mm: 2.128840173741699
+      normal_difference_deg: 3.326574794479418
+      depth_normal_color: [-0.01325456909777396, 0.1625235346322878, -0.9866156379708665]
+      pnp_normal_color: [0.008016748009714952, 0.1090177244288373, -0.9940074785994856]
+      depth_centroid_color_m: [-0.07361064204589661, -0.04419662856796722, 0.517243610607784]
+  - name: sample_05
+    target: 中距离约 0.50 m，画面左侧，板面轻微向上倾斜
+    corners: 45
+    reprojection_px: 0.1297188401222229
+    board_distance_m: 0.5693889407915894
+    color_depth_stamp_delta_ms: 132.6899528503418
+    median_depth_frames: 12
+    ray_count: 800
+    baseline:
+      point_count: 800
+      mean_signed_mm: -18.16616680658742
+      median_signed_mm: -18.33585197329508
+      mean_abs_mm: 18.16616680658742
+      median_abs_mm: 18.33585197329508
+      rms_mm: 18.28806468505665
+      max_abs_mm: 25.50731065828639
+    candidate_all_fit:
+      point_count: 800
+      mean_signed_mm: -8.04816184972155
+      median_signed_mm: -8.179832814135322
+      mean_abs_mm: 8.04816184972155
+      median_abs_mm: 8.179832814135322
+      rms_mm: 8.226893468938309
+      max_abs_mm: 14.55072695703659
+    held_out:
+      point_count: 800
+      mean_signed_mm: -8.398691987756191
+      median_signed_mm: -8.54624098567
+      mean_abs_mm: 8.398691987756191
+      median_abs_mm: 8.54624098567
+      rms_mm: 8.582073905295578
+      max_abs_mm: 15.00095833701985
+    plane_diagnostic:
+      depth_self_fit:
+        point_count: 800
+        mean_signed_mm: -4.123784647092066e-13
+        median_signed_mm: 0.2180489940348179
+        mean_abs_mm: 0.7838480476784636
+        median_abs_mm: 0.6413854123035101
+        rms_mm: 1.047242669695507
+        max_abs_mm: 5.238810483402609
+      normal_difference_deg: 2.809725439096407
+      depth_normal_color: [0.02514626686172902, 0.06279026802040352, -0.9977099014767994]
+      pnp_normal_color: [0.05439724287824427, 0.02344013938330203, -0.9982442085145983]
+      depth_centroid_color_m: [-0.1775948896386136, 0.01667632939175109, 0.5316415783311775]
+  - name: sample_06
+    target: 中距离约 0.50 m，画面右侧，板面基本正对相机
+    corners: 48
+    reprojection_px: 0.1770259141921997
+    board_distance_m: 0.5150604694713595
+    color_depth_stamp_delta_ms: 0
+    median_depth_frames: 14
+    ray_count: 800
+    baseline:
+      point_count: 800
+      mean_signed_mm: -14.12506772063941
+      median_signed_mm: -14.08140829152567
+      mean_abs_mm: 14.12506772063941
+      median_abs_mm: 14.08140829152567
+      rms_mm: 14.17708867886964
+      max_abs_mm: 17.81521256195906
+    candidate_all_fit:
+      point_count: 800
+      mean_signed_mm: -5.721007383896776
+      median_signed_mm: -5.724673014323321
+      mean_abs_mm: 5.721007383896776
+      median_abs_mm: 5.724673014323321
+      rms_mm: 5.824558060750888
+      max_abs_mm: 8.571827966074924
+    held_out:
+      point_count: 800
+      mean_signed_mm: -5.619638688824311
+      median_signed_mm: -5.606196150396869
+      mean_abs_mm: 5.619638688824311
+      median_abs_mm: 5.606196150396869
+      rms_mm: 5.72425979652258
+      max_abs_mm: 8.281470075286112
+    plane_diagnostic:
+      depth_self_fit:
+        point_count: 800
+        mean_signed_mm: 4.236118834183289e-13
+        median_signed_mm: -0.0008679274220572725
+        mean_abs_mm: 0.427310433406965
+        median_abs_mm: 0.3720334190715149
+        rms_mm: 0.5285150097211073
+        max_abs_mm: 1.51781392901529
+      normal_difference_deg: 2.009275646983381
+      depth_normal_color: [0.04383751909771672, 0.1193058538393579, -0.9918893008592335]
+      pnp_normal_color: [0.04505273330292389, 0.08443750591294455, -0.9954097441843419]
+      depth_centroid_color_m: [-0.01210945083921843, -0.09206821429061948, 0.5189184819034225]
+  - name: sample_07
+    target: 远距离约 0.65 m，画面中央，板面轻微向下倾斜
+    corners: 36
+    reprojection_px: 0.122182697057724
+    board_distance_m: 0.6721540268552745
+    color_depth_stamp_delta_ms: 0
+    median_depth_frames: 13
+    ray_count: 800
+    baseline:
+      point_count: 800
+      mean_signed_mm: -13.09155552949216
+      median_signed_mm: -12.94743328391062
+      mean_abs_mm: 13.09155552949216
+      median_abs_mm: 12.94743328391062
+      rms_mm: 13.23676664572084
+      max_abs_mm: 17.77829508472119
+    candidate_all_fit:
+      point_count: 800
+      mean_signed_mm: -4.832553559451257
+      median_signed_mm: -4.805839835588029
+      mean_abs_mm: 4.833711269263188
+      median_abs_mm: 4.805839835588029
+      rms_mm: 5.118842489188297
+      max_abs_mm: 8.736563920392003
+    held_out:
+      point_count: 800
+      mean_signed_mm: -5.021877294589431
+      median_signed_mm: -4.981563206396999
+      mean_abs_mm: 5.022232702316632
+      median_abs_mm: 4.981563206396999
+      rms_mm: 5.281322609654826
+      max_abs_mm: 8.81479088268396
+    plane_diagnostic:
+      depth_self_fit:
+        point_count: 800
+        mean_signed_mm: 8.596720340800501e-14
+        median_signed_mm: -0.09820183554649296
+        mean_abs_mm: 0.6639173979759858
+        median_abs_mm: 0.5219973496521521
+        rms_mm: 0.8706991115066777
+        max_abs_mm: 3.335456785833778
+      normal_difference_deg: 3.224074520825458
+      depth_normal_color: [0.06044101528902769, 0.04405349829872579, -0.9971991641384763]
+      pnp_normal_color: [0.06734293432626755, -0.0117829493950713, -0.9976603085719514]
+      depth_centroid_color_m: [-0.1189986742546999, -0.06272064748671813, 0.6702436321054738]
+  - name: sample_08
+    target: 远距离约 0.65 m，画面左侧，板面基本正对相机
+    corners: 27
+    reprojection_px: 0.09641431272029877
+    board_distance_m: 0.6993324618921346
+    color_depth_stamp_delta_ms: 0
+    median_depth_frames: 14
+    ray_count: 800
+    baseline:
+      point_count: 800
+      mean_signed_mm: -15.51196277062798
+      median_signed_mm: -15.4897313619929
+      mean_abs_mm: 15.51196277062798
+      median_abs_mm: 15.4897313619929
+      rms_mm: 15.72959812739044
+      max_abs_mm: 21.25215905437336
+    candidate_all_fit:
+      point_count: 800
+      mean_signed_mm: -5.481479423793052
+      median_signed_mm: -5.455177144878075
+      mean_abs_mm: 5.481479423793052
+      median_abs_mm: 5.455177144878075
+      rms_mm: 5.866616005306768
+      max_abs_mm: 10.29795359516849
+    held_out:
+      point_count: 800
+      mean_signed_mm: -6.139512358537959
+      median_signed_mm: -6.113752453478172
+      mean_abs_mm: 6.139512358537959
+      median_abs_mm: 6.113752453478172
+      rms_mm: 6.497110137729265
+      max_abs_mm: 11.00144735648542
+    plane_diagnostic:
+      depth_self_fit:
+        point_count: 800
+        mean_signed_mm: -2.205890635084695e-14
+        median_signed_mm: -0.1082445471855935
+        mean_abs_mm: 0.6360478907411404
+        median_abs_mm: 0.4964714853387888
+        rms_mm: 0.8722359213595275
+        max_abs_mm: 4.096155210074727
+      normal_difference_deg: 4.017803757785231
+      depth_normal_color: [0.08020111100667285, 0.02773221223365504, -0.9963928473237466]
+      pnp_normal_color: [0.1246032159101162, -0.02633466670168804, -0.9918571086172484]
+      depth_centroid_color_m: [-0.2169166470448669, 0.002696278028505612, 0.6679439693980666]
+  - name: sample_09
+    target: 远距离约 0.65 m，画面右侧，板面轻微向右倾斜
+    corners: 26
+    reprojection_px: 0.1084853485226631
+    board_distance_m: 0.6501638413291412
+    color_depth_stamp_delta_ms: 66.3449764251709
+    median_depth_frames: 12
+    ray_count: 800
+    baseline:
+      point_count: 800
+      mean_signed_mm: -5.963086775605563
+      median_signed_mm: -5.955233343615293
+      mean_abs_mm: 6.015271887315679
+      median_abs_mm: 5.962425224592907
+      rms_mm: 6.257654097541434
+      max_abs_mm: 10.93569282583194
+    candidate_all_fit:
+      point_count: 800
+      mean_signed_mm: -0.1563561006325573
+      median_signed_mm: -0.1030913671651243
+      mean_abs_mm: 1.421238570744177
+      median_abs_mm: 1.211659243351629
+      rms_mm: 1.870522818690203
+      max_abs_mm: 12.13243104091896
+    held_out:
+      point_count: 800
+      mean_signed_mm: -1.795547177800794
+      median_signed_mm: -1.781235159457671
+      mean_abs_mm: 2.101526655641958
+      median_abs_mm: 1.857024749086695
+      rms_mm: 2.516333973156584
+      max_abs_mm: 10.18578759547978
+    plane_diagnostic:
+      depth_self_fit:
+        point_count: 800
+        mean_signed_mm: 6.642039349080697e-14
+        median_signed_mm: -0.2703175923113924
+        mean_abs_mm: 1.029172206290361
+        median_abs_mm: 0.8286853983427631
+        rms_mm: 1.415201705079619
+        max_abs_mm: 10.03153465988433
+      normal_difference_deg: 2.977616351577999
+      depth_normal_color: [0.1459281204178088, 0.0006911412276398988, -0.9892949539925537]
+      pnp_normal_color: [0.1226968055468389, -0.04574278915557413, -0.9913894750040823]
+      depth_centroid_color_m: [-0.03293754627724319, -0.1153327938381909, 0.6616276230308348]
+leave_one_group_out:
+  group_median_abs_mm:
+    mean: 5.516526546369887
+    median: 5.904327874625743
+    max: 8.54624098567
+  group_rms_mm:
+    mean: 5.887240286856958
+    median: 6.123633436329761
+    max: 8.582073905295578
+  folds:
+    - held_out: sample_01
+      residuals:
+        point_count: 800
+        mean_signed_mm: -7.505752155934598
+        median_signed_mm: -7.491780210229353
+        mean_abs_mm: 7.505752155934598
+        median_abs_mm: 7.491780210229353
+        rms_mm: 7.617398215109501
+        max_abs_mm: 10.93516315896313
+      fit_iterations: 23
+      fit_converged: true
+      normal_condition_number: 5243999450.779431
+    - held_out: sample_02
+      residuals:
+        point_count: 800
+        mean_signed_mm: 2.0077240770672
+        median_signed_mm: 1.461264745414898
+        mean_abs_mm: 2.040013831717661
+        median_abs_mm: 1.461264745414898
+        rms_mm: 2.780016249274417
+        max_abs_mm: 13.04886889244762
+      fit_iterations: 25
+      fit_converged: true
+      normal_condition_number: 4596357025.646627
+    - held_out: sample_03
+      residuals:
+        point_count: 800
+        mean_signed_mm: -6.00486023111344
+        median_signed_mm: -5.904327874625743
+        mean_abs_mm: 6.00486023111344
+        median_abs_mm: 5.904327874625743
+        rms_mm: 6.123633436329761
+        max_abs_mm: 10.41744632554482
+      fit_iterations: 24
+      fit_converged: true
+      normal_condition_number: 4689853245.780866
+    - held_out: sample_04
+      residuals:
+        point_count: 800
+        mean_signed_mm: -7.66174443447269
+        median_signed_mm: -7.686588542030252
+        mean_abs_mm: 7.66174443447269
+        median_abs_mm: 7.686588542030252
+        rms_mm: 7.863014258640104
+        max_abs_mm: 11.82822832712356
+      fit_iterations: 24
+      fit_converged: true
+      normal_condition_number: 4304106638.663942
+    - held_out: sample_05
+      residuals:
+        point_count: 800
+        mean_signed_mm: -8.398691987756191
+        median_signed_mm: -8.54624098567
+        mean_abs_mm: 8.398691987756191
+        median_abs_mm: 8.54624098567
+        rms_mm: 8.582073905295578
+        max_abs_mm: 15.00095833701985
+      fit_iterations: 28
+      fit_converged: true
+      normal_condition_number: 5030919896.358905
+    - held_out: sample_06
+      residuals:
+        point_count: 800
+        mean_signed_mm: -5.619638688824311
+        median_signed_mm: -5.606196150396869
+        mean_abs_mm: 5.619638688824311
+        median_abs_mm: 5.606196150396869
+        rms_mm: 5.72425979652258
+        max_abs_mm: 8.281470075286112
+      fit_iterations: 33
+      fit_converged: true
+      normal_condition_number: 4507332086.415606
+    - held_out: sample_07
+      residuals:
+        point_count: 800
+        mean_signed_mm: -5.021877294589431
+        median_signed_mm: -4.981563206396999
+        mean_abs_mm: 5.022232702316632
+        median_abs_mm: 4.981563206396999
+        rms_mm: 5.281322609654826
+        max_abs_mm: 8.81479088268396
+      fit_iterations: 33
+      fit_converged: true
+      normal_condition_number: 4258450842.713598
+    - held_out: sample_08
+      residuals:
+        point_count: 800
+        mean_signed_mm: -6.139512358537959
+        median_signed_mm: -6.113752453478172
+        mean_abs_mm: 6.139512358537959
+        median_abs_mm: 6.113752453478172
+        rms_mm: 6.497110137729265
+        max_abs_mm: 11.00144735648542
+      fit_iterations: 31
+      fit_converged: true
+      normal_condition_number: 8855137965.389133
+    - held_out: sample_09
+      residuals:
+        point_count: 800
+        mean_signed_mm: -1.795547177800794
+        median_signed_mm: -1.781235159457671
+        mean_abs_mm: 2.101526655641958
+        median_abs_mm: 1.857024749086695
+        rms_mm: 2.516333973156584
+        max_abs_mm: 10.18578759547978
+      fit_iterations: 26
+      fit_converged: true
+      normal_condition_number: 4120785089.483705
+  parameter_stability:
+    scale_factor_abs_difference:
+      mean: 0.0009413710508279833
+      median: 8.100795131149585e-05
+      max: 0.007324552649301763
+    ray_bias_abs_difference_mm:
+      mean: 0.1659302850704867
+      median: 0.05796676035869745
+      max: 0.6202455285142063
+    extrinsic_translation_difference_mm:
+      mean: 4.149753768588188
+      median: 0.560099473300703
+      max: 25.12948765655913
+    extrinsic_rotation_difference_deg:
+      mean: 1.024085402152125
+      median: 0.6312865392151181
+      max: 3.732462088635673
+acceptance:
+  accepted: false
+  offline_fit_quality_passed: false
+  checks:
+    minimum_nine_groups: true
+    all_fit_median_abs_le_1mm: false
+    loo_group_median_le_2mm_and_max_le_3mm: false
+    median_error_reduced_by_half: true
+    normal_condition_le_1e10: true
+    leave_one_out_parameter_stability: false
+  reason: offline candidate remains disabled until review and an independent blind entry validation pass

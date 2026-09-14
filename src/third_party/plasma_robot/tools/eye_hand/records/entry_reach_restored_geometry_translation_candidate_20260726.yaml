@@ -1,0 +1,59 @@
+schema_version: 1
+name: entry_reach_translation_candidate_20260726
+status: training_candidate_only
+validated: false
+execution_allowed: false
+motion_commands_published: false
+method: three_or_more_point_translation_only_source_frame_correction
+source_frame: camera_depth_optical_frame
+meaning: T_base_source_corrected = T_base_source_current * T_source_correction
+training_record_ids:
+  - 20260726_152216
+  - 20260726_152925
+  - 20260726_154731
+training_acquisition_ids:
+  - 重建1路径_1785050059_580721636@1785050059.580721636
+  - 重建1路径_1785050741_707393636@1785050741.707393636
+  - 重建1路径_1785047091_463702636@1785047091.463702636
+T_source_correction:
+  -
+    - 1
+    - 0
+    - 0
+    - -0.02808246534673072
+  -
+    - 0
+    - 1
+    - 0
+    - -0.06682313793325369
+  -
+    - 0
+    - 0
+    - 1
+    - -0.01789389893941308
+  -
+    - 0
+    - 0
+    - 0
+    - 1
+metrics:
+  rotation_deg: 0
+  translation_mm:
+    - -28.08246534673072
+    - -66.82313793325369
+    - -17.89389893941308
+  singular_values:
+    - 0
+    - 0
+    - 0
+  training_residual_mm:
+    - 2.988514133106184
+    - 3.983994219572828
+    - 3.922632779559981
+  training_rms_mm: 3.660167327169783
+  training_max_mm: 3.983994219572828
+review:
+  independent_blind_validation_required: true
+  may_replace_handeye_yaml: false
+  may_enable_motion: false
+  note: Translation-only candidate; preview and independent blind validation are required.

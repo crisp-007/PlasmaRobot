@@ -1,0 +1,70 @@
+schema_version: 1
+name: l515_handeye_20260729_stable_001_058_tsai
+created_at: 2026-07-29T18:20:00+08:00
+camera:
+  model: Intel RealSense L515
+  serial: f1423110
+  color_resolution: [640, 480]
+frame_convention:
+  matrix: T_camera_to_gripper
+  meaning: gripper_T_camera
+  units: meters
+board:
+  type: ChArUco
+  squares: [9, 7]
+  square_size_mm: 20.0
+  marker_size_mm: 15.0
+  dictionary: DICT_4X4_50
+method: TSAI
+selection: AUTO
+n_samples: 58
+T_camera_to_gripper:
+  - [-0.8761026938400751, -0.4820239226930491, 0.009849253665585103, -0.03667808260078715]
+  - [0.4821000790706463, -0.8760811967072424, 0.00782627217024288, -0.061625162481591104]
+  - [0.004856295526455075, 0.011604944102040828, 0.9999208677021139, 0.029686177776824012]
+  - [0.0, 0.0, 0.0, 1.0]
+T_gripper_to_camera:
+  - [-0.8761026938400751, 0.48210007907064617, 0.004856295526455075, -0.0025684361186570585]
+  - [-0.48202392269304906, -0.8760811967072423, 0.011604944102040828, -0.07201286577994497]
+  - [0.009849253665585103, 0.00782627217024288, 0.9999208677021139, -0.02884028160774227]
+  - [0.0, 0.0, 0.0, 1.0]
+t_camera_to_gripper_mm: [-36.678083, -61.625162, 29.686178]
+camera_matrix:
+  - [603.1371459960938, 0.0, 323.3505554199219]
+  - [0.0, 603.1104736328125, 242.12680053710938]
+  - [0.0, 0.0, 1.0]
+dist_coeffs:
+  - 0.13920314610004425
+  - -0.45931169390678406
+  - -0.0006744764395989478
+  - -0.0006421792786568403
+  - 0.4030662178993225
+validation:
+  strict_offline_accepted: false
+  fixed_board:
+    translation_median_mm: 2.540732
+    translation_max_mm: 6.91537
+    rotation_median_deg: 0.645816
+    rotation_max_deg: 1.474365
+  kfold:
+    translation_median_mm: 2.675345
+    translation_max_mm: 6.998988
+    rotation_median_deg: 0.70584
+    rotation_max_deg: 1.570393
+  leave_one_out:
+    translation_max_mm: 1.432479
+    rotation_max_deg: 0.125022
+  pending_checks: [camera_mount_independent_pose, pnp_vs_depth, rounded_tip_entry_blind]
+deployment:
+  status: user_approved_provisional_use
+  approved_on: 2026-07-29
+  strict_quality_accepted: false
+  current_symlink_switched: true
+  current_registry: /home/larusxu/Data/script/pointcloud_get/calib_data/handeye_matrices/provisional_tsai_20260729_stable_001_058
+  permitted_use: [pointcloud, coordinate_transform, normal_estimation, rviz_preview]
+  contact_execution_permitted: false
+source:
+  dataset: /home/larusxu/Data/script/pointcloud_get/calibration/calib_data/handeye_l515_20260729_161944_precision_v1_stable_001_058
+  result: /home/larusxu/Data/script/pointcloud_get/calibration/calib_data/handeye_l515_20260729_161944_precision_v1_stable_001_058/result/camera_to_gripper.yaml
+  quality_report: /home/larusxu/Data/script/pointcloud_get/calibration/calib_data/handeye_l515_20260729_161944_precision_v1_stable_001_058/result/quality_report.yaml
+  excluded_after_setup_shift: [img_059.png, img_060.png, img_061.png, img_062.png]

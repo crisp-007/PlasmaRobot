@@ -1,0 +1,142 @@
+schema_version: 2
+status: measurement_requires_review
+motion_commands_published: false
+sources:
+  pose_topic: /rm_driver/udp_arm_position
+  path_topic: /plasma/planned_spray_path/base
+  camera_path_topic: /plasma/planned_spray_path/camera
+  tcp_yaml: /home/larusxu/CodeSpace/PlasmaRobot/install/plasma_tool_description/share/plasma_tool_description/config/tcp_3_4_200_1x10.yaml
+records:
+  - record_id: 20260726_170600
+    captured_at: 2026-07-26T17:06:00+0800
+    path_id: 重建1路径_1785046911_308399636
+    acquisition_id: 重建1路径_1785046911_308399636@1785046911.308399636
+    calibration_id: l515_handeye_20260723_152410_horaud+training_refinement:entry_reach_translation_candidate_20260726
+    path_execution_permitted: false
+    target_kind: geometric_cavity_mouth_for_rounded_nozzle_tip
+    T_base_to_target_nozzle_tip:
+      -
+        - -0.1515463568535997
+        - -0.8479584784068175
+        - 0.5079371227055531
+        - -0.5175673257369094
+      -
+        - 0.101181146091284
+        - 0.497865014717819
+        - 0.861331993365903
+        - -0.04934499763648603
+      -
+        - -0.983257889569189
+        - 0.1819253858537085
+        - 0.0103477814976739
+        - 0.02888105579891787
+      -
+        - 0
+        - 0
+        - 0
+        - 1
+    cavity_outward_axis_base:
+      - 0.1515463568535999
+      - -0.1011811460912841
+      - 0.983257889569189
+    T_base_to_observed_nozzle_tip:
+      -
+        - -0.1093900662728164
+        - 0.866451327186018
+        - -0.4871302813605585
+        - -0.5121019088468038
+      -
+        - 0.0980360457440167
+        - -0.4782773400215067
+        - -0.8727197257750218
+        - -0.05625082291827755
+      -
+        - -0.9891525398722414
+        - -0.1432231951868832
+        - -0.03262467202523349
+        - 0.03529772140387215
+      -
+        - 0
+        - 0
+        - 0
+        - 1
+    source_geometry:
+      frame_id: camera_depth_optical_frame
+      T_source_to_target_nozzle_tip:
+        -
+          - 0.424785465074011
+          - 0.03803186806549878
+          - 0.9044948234640731
+          - 0.03060186347532099
+        -
+          - 0.08917530989328457
+          - -0.996015945708419
+          - -3.145161435458288e-08
+          - 0.0782860227745758
+        -
+          - 0.9008912657847743
+          - 0.08065861953946905
+          - -0.4264846003394431
+          - 0.464054861290732
+        -
+          - 0
+          - 0
+          - 0
+          - 1
+      cavity_outward_axis:
+        - -0.4247854650740109
+        - -0.08917530989328455
+        - -0.9008912657847743
+    capture_joint_state:
+      name:
+        - joint1
+        - joint2
+        - joint3
+        - joint4
+        - joint5
+        - joint6
+      position_rad:
+        - -0.4642048874855041
+        - 0.08583655259609223
+        - -1.292678591537476
+        - -0.1307354017972946
+        - 1.970297004318237
+        - 3.717373478698731
+    observed_minus_target:
+      translation_m:
+        - 0.005465416890105601
+        - -0.006905825281791518
+        - 0.00641666560495428
+      norm_mm: 10.89655000865346
+      signed_axial_mm: 7.836240415898015
+      lateral_mm: 7.571534734473075
+      axis_alignment_deg: 2.445709820414212
+      full_orientation_deg: 178.451590452504
+    repeatability_only: true
+    repeat_index: 1
+qualification:
+  complete_records: 1
+  distinct_acquisition_ids: 1
+  required_distinct_acquisitions: 3
+  mean_translation_mm:
+    - 5.465416890105601
+    - -6.905825281791518
+    - 6.41666560495428
+  translation_stddev_mm:
+    - 0
+    - 0
+    - 0
+  mean_norm_mm: 10.89655000865346
+  max_norm_mm: 10.89655000865346
+  max_abs_axial_mm: 7.836240415898015
+  max_lateral_mm: 7.571534734473075
+  max_axis_alignment_deg: 2.445709820414212
+  limits:
+    max_norm_mm: 5
+    max_abs_axial_mm: 5
+    max_lateral_mm: 3
+    max_axis_alignment_deg: 2
+  all_errors_within_limits: false
+  accepted: false
+  scope: camera-to-base and rounded-nozzle-tip insertion accuracy at cavity mouth
+  automatic_yaml_approval: false

@@ -1,0 +1,172 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="plasma_tool_v2"
+               params="
+                 parent_link:='world'
+                 base_xyz:='0 0 0'
+                 base_rpy:='0 0 0'
+                 tool_base_mesh:='package://plasma_urdf_v2/meshes/base/tool_base_link.STL'
+                 adapter_mesh:='package://plasma_urdf_v2/meshes/adapter/adapter_link_3_4.STL'
+                 spray_rod_mesh:='package://plasma_urdf_v2/meshes/spray_rod/spray_rod_link_3_4_150_1x5.STL'
+                 adapter_xyz:='0 0.078 0'
+                 adapter_rpy:='0 0 0'
+                 rod_xyz:='0 0.03 0'
+                 rod_rpy:='0 0 0'
+                 tcp_xyz:='0 0.150 0'
+                 tcp_rpy:='0 0 0'
+                 tool_base_mass:='0.180721738279306'
+                 tool_base_inertial_xyz:='-1.759E-07 0.02497 0.0428'
+                 tool_base_inertial_rpy:='0 0 0'
+                 tool_base_ixx:='0.000138130675577891'
+                 tool_base_ixy:='-2.6261056277312E-10'
+                 tool_base_ixz:='-6.35486422323285E-12'
+                 tool_base_iyy:='0.000156940897134088'
+                 tool_base_iyz:='1.37580712120744E-10'
+                 tool_base_izz:='7.74611978883539E-05'
+                 adapter_mass:='0.019808'
+                 adapter_inertial_xyz:='0 0.0090505 0'
+                 adapter_inertial_rpy:='0 0 0'
+                 adapter_ixx:='4.4239E-06'
+                 adapter_ixy:='4.4618E-23'
+                 adapter_ixz:='6.8112E-39'
+                 adapter_iyy:='1.9374E-06'
+                 adapter_iyz:='1.7363E-38'
+                 adapter_izz:='4.4239E-06'
+                 spray_rod_mass:='0.0043827'
+                 spray_rod_inertial_xyz:='0 0.099655 -3.9929E-06'
+                 spray_rod_inertial_rpy:='0 0 0'
+                 spray_rod_ixx:='1.454E-05'
+                 spray_rod_ixy:='5.2967E-22'
+                 spray_rod_ixz:='-2.6255E-25'
+                 spray_rod_iyy:='5.4471E-08'
+                 spray_rod_iyz:='1.6423E-09'
+                 spray_rod_izz:='1.454E-05'
+               ">
+
+    <!-- tool_base_link -->
+    <link name="tool_base_link">
+      <inertial>
+        <origin xyz="${tool_base_inertial_xyz}" rpy="${tool_base_inertial_rpy}"/>
+        <mass value="${tool_base_mass}"/>
+        <inertia
+          ixx="${tool_base_ixx}"
+          ixy="${tool_base_ixy}"
+          ixz="${tool_base_ixz}"
+          iyy="${tool_base_iyy}"
+          iyz="${tool_base_iyz}"
+          izz="${tool_base_izz}"/>
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="${tool_base_mesh}"/>
+        </geometry>
+        <material name="tool_base_material">
+          <color rgba="0.84706 0.97255 0.78039 1"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="${tool_base_mesh}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="link6_to_tool_base" type="fixed">
+      <origin xyz="${base_xyz}" rpy="${base_rpy}"/>
+      <parent link="${parent_link}"/>
+      <child link="tool_base_link"/>
+    </joint>
+
+    <!-- adapter_link -->
+    <link name="adapter_link">
+      <inertial>
+        <origin xyz="${adapter_inertial_xyz}" rpy="${adapter_inertial_rpy}"/>
+        <mass value="${adapter_mass}"/>
+        <inertia
+          ixx="${adapter_ixx}"
+          ixy="${adapter_ixy}"
+          ixz="${adapter_ixz}"
+          iyy="${adapter_iyy}"
+          iyz="${adapter_iyz}"
+          izz="${adapter_izz}"/>
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="${adapter_mesh}"/>
+        </geometry>
+        <material name="adapter_material">
+          <color rgba="1 1 1 1"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="${adapter_mesh}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="tool_base_to_adapter" type="fixed">
+      <origin xyz="${adapter_xyz}" rpy="${adapter_rpy}"/>
+      <parent link="tool_base_link"/>
+      <child link="adapter_link"/>
+    </joint>
+
+    <!-- spray_rod_link -->
+    <link name="spray_rod_link">
+      <inertial>
+        <origin xyz="${spray_rod_inertial_xyz}" rpy="${spray_rod_inertial_rpy}"/>
+        <mass value="${spray_rod_mass}"/>
+        <inertia
+          ixx="${spray_rod_ixx}"
+          ixy="${spray_rod_ixy}"
+          ixz="${spray_rod_ixz}"
+          iyy="${spray_rod_iyy}"
+          iyz="${spray_rod_iyz}"
+          izz="${spray_rod_izz}"/>
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="${spray_rod_mesh}"/>
+        </geometry>
+        <material name="spray_rod_material">
+          <color rgba="1 1 1 1"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="${spray_rod_mesh}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="adapter_to_spray_rod" type="fixed">
+      <origin xyz="${rod_xyz}" rpy="${rod_rpy}"/>
+      <parent link="adapter_link"/>
+      <child link="spray_rod_link"/>
+    </joint>
+
+    <!-- spray_tcp_link -->
+    <link name="spray_tcp_link"/>
+
+    <joint name="spray_rod_to_tcp" type="fixed">
+      <origin xyz="${tcp_xyz}" rpy="${tcp_rpy}"/>
+      <parent link="spray_rod_link"/>
+      <child link="spray_tcp_link"/>
+    </joint>
+
+  </xacro:macro>
+
+</robot>

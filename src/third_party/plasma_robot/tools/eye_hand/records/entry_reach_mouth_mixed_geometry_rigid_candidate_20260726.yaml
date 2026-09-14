@@ -1,0 +1,59 @@
+schema_version: 1
+name: entry_reach_mouth_mixed_geometry_rigid_candidate_20260726
+status: rejected_mixed_geometry_training_set
+validated: false
+execution_allowed: false
+motion_commands_published: false
+method: three_or_more_point_kabsch_source_frame_correction
+source_frame: camera_depth_optical_frame
+meaning: T_base_source_corrected = T_base_source_current * T_source_correction
+training_record_ids:
+  - 20260726_142449
+  - 20260726_143630
+  - 20260726_152216
+training_acquisition_ids:
+  - 重建1路径_1785046734_923161617@1785046734.923161617
+  - 重建2路径_1785047402_252260104@1785047402.252260104
+  - 重建1路径_1785050059_580721636@1785050059.580721636
+T_source_correction:
+  -
+    - -0.4953121430102266
+    - 0.4647863448327064
+    - -0.7339206596381315
+    - 0.3317038171558447
+  -
+    - 0.8265118663277656
+    - -0.007993106820700525
+    - -0.5628625454431544
+    - 0.2203879510019338
+  -
+    - -0.2674771313701634
+    - -0.8853867877376563
+    - -0.3801923464426697
+    - 0.6835886857089641
+  -
+    - 0
+    - 0
+    - 0
+    - 1
+metrics:
+  rotation_deg: 160.3473491159012
+  translation_mm:
+    - 331.7038171558447
+    - 220.3879510019338
+    - 683.5886857089641
+  singular_values:
+    - 0.001003886649937971
+    - 2.067285086083481e-05
+    - 5.791957530473329e-21
+  training_residual_mm:
+    - 11.34836047132923
+    - 2.706854963644877
+    - 9.350900619125365
+  training_rms_mm: 8.632336330530606
+  training_max_mm: 11.34836047132923
+review:
+  independent_blind_validation_required: true
+  may_replace_handeye_yaml: false
+  may_enable_motion: false
+  note: Rejected. Records 20260726_142449/143630 used the fixed full-mesh boundary axis, while 20260726_152216 used the restored surgical-region centerline axis. The 160.347 degree correction is non-physical and must never be loaded.

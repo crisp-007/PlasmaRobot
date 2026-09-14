@@ -1,0 +1,15 @@
+# Empty path_id selects the most recently accepted transformed path.
+string path_id
+
+# This first executor version only accepts dry_run=true. Real plasma output
+# remains disabled until the hardware interlock and acknowledgement are wired.
+bool dry_run
+
+# True only after the operator has reviewed the MoveIt path to pre-entry, or
+# manually placed the tool inside the bounded entry correction envelope, and
+# confirmed that the cavity axis is clear. The executor moves in short linear
+# steps through entry and to the first spray layer.
+bool approach_from_confirmed_entry
+---
+bool accepted
+string message

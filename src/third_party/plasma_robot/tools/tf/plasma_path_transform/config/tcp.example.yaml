@@ -1,0 +1,11 @@
+# Schema only. Replace this with the measured Link6-to-tool transform.
+calibration_id: replace_with_real_tcp_id
+status: provisional
+validated: false
+gripper_frame: Link6
+tcp_frame: Arm_Tip
+T_gripper_to_tcp:
+  - [1.0, 0.0, 0.0, 0.0]
+  - [0.0, 1.0, 0.0, 0.0]
+  - [0.0, 0.0, 1.0, 0.0]
+  - [0.0, 0.0, 0.0, 1.0]

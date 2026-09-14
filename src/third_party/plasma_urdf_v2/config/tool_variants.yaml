@@ -1,0 +1,209 @@
+adapters:
+  "3_4":
+    mesh: "package://plasma_urdf_v2/meshes/adapter/adapter_link_3_4.STL"
+    mass: 0.045077
+    inertial_xyz: [1.301E-18, 0.0085802, 0]
+    inertial_rpy: [0.0, 0.0, 0.0]
+    inertia:
+      ixx: 9.4114E-06
+      ixy: -2.0526E-22
+      ixz: 1.629E-38
+      iyy: 4.3315E-06
+      iyz: 4.2246E-38
+      izz: 9.4114E-06
+
+  "6_8":
+    mesh: "package://plasma_urdf_v2/meshes/adapter/adapter_link_6_8.STL"
+    mass: 0.019808
+    inertial_xyz: [0.0, 0.0090505, 0.0]
+    inertial_rpy: [0.0, 0.0, 0.0]
+    inertia:
+      ixx: 4.4239e-06
+      ixy: 4.4618e-23
+      ixz: 6.8112e-39
+      iyy: 1.9374e-06
+      iyz: 1.7363e-38
+      izz: 4.4239e-06
+
+spray_rods:
+  "3_4":
+    150_1x5:
+      mesh: "package://plasma_urdf_v2/meshes/spray_rod/spray_rod_link_3_4_150_1x5.STL"
+      mass: 0.00082082
+      inertial_xyz: [-6.9389E-18, 0.074669, -5.33E-06]
+      inertial_rpy: [0.0, 0.0, 0.0]
+      inertia:
+        ixx: 0
+        ixy: 3.5444E-25
+        ixz: -1.0158E-25
+        iyy: 2.5553E-09
+        iyz: 3.0114E-10
+        izz: 1.5282E-06
+      tcp_xyz: [0.0, 0.1435, 0.0]
+      tcp_rpy: [0.0, 0.0, 0.0]
+
+    150_1x10:
+      mesh: "package://plasma_urdf_v2/meshes/spray_rod/spray_rod_link_3_4_150_1x10.STL"
+      mass: 0.00082082
+      inertial_xyz: [0, 0.074669, -5.33E-06]
+      inertial_rpy: [0.0, 0.0, 0.0]
+      inertia:
+        ixx: 1.5282E-06
+        ixy: 3.5381E-25
+        ixz: -9.8513E-26
+        iyy: 2.5553E-09
+        iyz: 3.0114E-10
+        izz: 1.5282E-06
+      tcp_xyz: [0.0, 0.146, 0.0]
+      tcp_rpy: [0.0, 0.0, 0.0]
+
+    150_1x20:
+      mesh: "package://plasma_urdf_v2/meshes/spray_rod/spray_rod_link_3_4_150_1x20.STL"
+      mass: 0.00082082
+      inertial_xyz: [8.6736E-19, 0.074669, -5.33E-06]
+      inertial_rpy: [0.0, 0.0, 0.0]
+      inertia:
+        ixx: 1.5282E-06
+        ixy: 2.8419E-25
+        ixz: -4.6502E-26
+        iyy: 2.5553E-09
+        iyz: 3.0114E-10
+        izz: 1.5282E-06
+      tcp_xyz: [0.0, 0.151, 0.0]
+      tcp_rpy: [0.0, 0.0, 0.0]
+
+    200_1x5:
+      mesh: "package://plasma_urdf_v2/meshes/spray_rod/spray_rod_link_3_4_200_1x5.STL"
+      mass: 0.0010957
+      inertial_xyz: [4.3368E-19, 0.099664, -3.9928E-06]
+      inertial_rpy: [0.0, 0.0, 0.0]
+      inertia:
+        ixx: 3.6315E-06
+        ixy: 2.5459E-25
+        ixz: -1.5017E-25
+        iyy: 5.4471e-08
+        iyz: 1.6423e-09
+        izz: 3.6316E-06
+      tcp_xyz: [0.0, 0.1935, 0.0]
+      tcp_rpy: [0.0, 0.0, 0.0]
+
+    200_1x10:
+      mesh: "package://plasma_urdf_v2/meshes/spray_rod/spray_rod_link_3_4_200_1x10.STL"
+      mass: 0.0010957
+      inertial_xyz: [0, 0.099664, -3.9928E-06]
+      inertial_rpy: [0.0, 0.0, 0.0]
+      inertia:
+        ixx: 3.6315E-06
+        ixy: 2.5478E-25
+        ixz: -1.4602E-25
+        iyy: 3.4144E-09
+        iyz: 4.1053E-10
+        izz: 3.6316E-06
+      tcp_xyz: [0.0, 0.196, 0.0]
+      tcp_rpy: [0.0, 0.0, 0.0]
+
+    200_1x20:
+      mesh: "package://plasma_urdf_v2/meshes/spray_rod/spray_rod_link_3_4_200_1x20.STL"
+      mass: 0.0010957
+      inertial_xyz: [0, 0.099664, -3.9928E-06]
+      inertial_rpy: [0.0, 0.0, 0.0]
+      inertia:
+        ixx: 3.6315E-06
+        ixy: 1.9915E-24
+        ixz: -8.5983E-26
+        iyy: 3.4144E-09
+        iyz: 4.1053E-10
+        izz: 3.6316E-06
+      tcp_xyz: [0.0, 0.201, 0.0]
+      tcp_rpy: [0.0, 0.0, 0.0]
+
+  "6_8":
+    150_1x5:
+      mesh: "package://plasma_urdf_v2/meshes/spray_rod/spray_rod_link_6_8_150_1x5.STL"
+      mass: 0.00328318278014114
+      inertial_xyz: [1.0842021724855E-19, 0.0746571328208185, -5.33019364802167E-06]
+      inertial_rpy: [0.0, 0.0, 0.0]
+      inertia:
+        ixx: 6.12300709912048E-06
+        ixy: -2.83655798416279E-24
+        ixz: -3.54187175896563E-25
+        iyy: 4.07261649228115E-08
+        iyz: 1.2047501756357E-09
+        izz: 6.12306823077499E-06
+      tcp_xyz: [0.0, 0.1435, 0.0]
+      tcp_rpy: [0.0, 0.0, 0.0]
+
+    150_1x10:
+      mesh: "package://plasma_urdf_v2/meshes/spray_rod/spray_rod_link_6_8_150_1x10.STL"
+      mass: 0.0032832
+      inertial_xyz: [-1.7347E-18, 0.074657, -5.3302E-06]
+      inertial_rpy: [0.0, 0.0, 0.0]
+      inertia:
+        ixx: 6.123E-06
+        ixy: 1.7237E-25
+        ixz: -2.9075E-25
+        iyy: 4.0726E-08
+        iyz: 1.2048E-09
+        izz: 6.1231E-06
+      tcp_xyz: [0.0, 0.1460, 0.0]
+      tcp_rpy: [0.0, 0.0, 0.0]
+
+    150_1x20:
+      mesh: "package://plasma_urdf_v2/meshes/spray_rod/spray_rod_link_6_8_150_1x20.STL"
+      mass: 0.0032832
+      inertial_xyz: [0, 0.074657, -5.3302E-06]
+      inertial_rpy: [0.0, 0.0, 0.0]
+      inertia:
+        ixx: 6.123E-06
+        ixy: 1.7055E-25
+        ixz: -2.9078E-25
+        iyy: 4.0726E-08
+        iyz: 1.2048E-09
+        izz: 6.1231E-06
+      tcp_xyz: [0.0, 0.1465, 0.0]
+      tcp_rpy: [0.0, 0.0, 0.0]
+
+    200_1x5:
+      mesh: "package://plasma_urdf_v2/meshes/spray_rod/spray_rod_link_6_8_200_1x5.STL"
+      mass: 0.0032832
+      inertial_xyz: [4.3368E-19, 0.099655, -3.9929E-06]
+      inertial_rpy: [0.0, 0.0, 0.0]
+      inertia:
+        ixx: 1.454E-05
+        ixy: 7.6339E-24
+        ixz: -2.8165E-25
+        iyy: 5.4471E-08
+        iyz: 1.6423E-09
+        izz: 1.454E-05
+      tcp_xyz: [0.0, 0.1935, 0.0]
+      tcp_rpy: [0.0, 0.0, 0.0]
+
+    200_1x10:
+      mesh: "package://plasma_urdf_v2/meshes/spray_rod/spray_rod_link_6_8_200_1x10.STL"
+      mass: 0.0043827
+      inertial_xyz: [0, 0.099655, -3.9929E-06]
+      inertial_rpy: [0.0, 0.0, 0.0]
+      inertia:
+        ixx: 1.454E-05
+        ixy: 6.3667E-26
+        ixz: -3.8565E-25
+        iyy: 5.4471E-08
+        iyz: 1.6423E-09
+        izz: 1.454E-05
+      tcp_xyz: [0.0, 0.1960, 0.0]
+      tcp_rpy: [0.0, 0.0, 0.0]
+
+    200_1x20:
+      mesh: "package://plasma_urdf_v2/meshes/spray_rod/spray_rod_link_6_8_200_1x20.STL"
+      mass: 0.0043827
+      inertial_xyz: [0, 0.099655, -3.9929E-06]
+      inertial_rpy: [0.0, 0.0, 0.0]
+      inertia:
+        ixx: 1.454E-05
+        ixy: 8.2021E-24
+        ixz: -2.4591E-25
+        iyy: 5.4471E-08
+        iyz: 1.6423E-09
+        izz: 1.454E-05
+      tcp_xyz: [0.0, 0.1965, 0.0]
+      tcp_rpy: [0.0, 0.0, 0.0]

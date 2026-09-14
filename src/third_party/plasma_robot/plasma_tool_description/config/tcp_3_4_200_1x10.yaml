@@ -1,0 +1,100 @@
+calibration_id: plasma_tool_3_4_200_1x10_side_outlet_tcp_v6
+status: installed_dimensions_user_confirmed
+validated: false
+
+tool_variant:
+  adapter_type: "3_4"
+  spray_rod_type: "200_1x10"
+  nominal_flange_to_motion_tcp_axial_m: 0.310
+  nominal_flange_to_motion_tcp_radial_m: 0.002
+  nominal_flange_to_nozzle_tip_m: 0.318
+
+measurement:
+  # Scalar compatibility fields are axial projections used by the current GUI.
+  flange_to_tip_m: 0.318
+  flange_to_motion_tcp_m: 0.310
+  flange_to_motion_tcp_xyz_m: [0.002, 0.0, 0.310]
+  axis: Link6_positive_z
+  source: installed_component_stack_and_user_side_outlet_observation
+  confirmed_date: "2026-07-30"
+  flange_end_plate_length_m: 0.008
+  fixed_cover_length_m: 0.070
+  gun_head_length_m: 0.040
+  gun_body_exit_from_flange_m: 0.118
+  rod_total_length_m: 0.210
+  rod_insertion_length_m: 0.010
+  rod_exposed_length_m: 0.200
+  side_outlet_axial_length_m: 0.010
+  nozzle_tip_to_outlet_near_edge_axial_m: 0.003
+  nozzle_tip_to_outlet_center_axial_m: 0.008
+  # TCP-to-rounded-nozzle-end axial clearance.
+  motion_tcp_to_safety_tip_m: 0.008
+  shaft_outer_radius_m: 0.002
+
+frames:
+  gripper: Link6
+  controller_zero_tool: Arm_Tip
+  tcp: plasma_motion_tcp
+  nozzle_tip: plasma_nozzle_tip
+  spray_outlet: plasma_spray_outlet
+
+frame_convention:
+  matrix: T_gripper_to_tcp
+  meaning: gripper_T_tcp
+  units: meters
+  tcp_positive_x: along_rod_toward_nozzle_tip
+  tcp_positive_z: side_spray_direction
+
+# The physical side-outlet center is the motion TCP. The near edge is 3 mm
+# behind the rounded end; the 10 mm outlet center is therefore 8 mm behind it.
+# The center is 2 mm radially from the rod axis for the 3_4 rod.
+# The rounded nozzle end remains only as geometry for bottom-clearance checks.
+T_gripper_to_tcp:
+  - [0.0, 0.0, 1.0, 0.002]
+  - [0.0, -1.0, 0.0, 0.0]
+  - [1.0, 0.0, 0.0, 0.310]
+  - [0.0, 0.0, 0.0, 1.0]
+
+T_tcp_to_nozzle_tip:
+  - [1.0, 0.0, 0.0, 0.008]
+  - [0.0, 1.0, 0.0, 0.0]
+  - [0.0, 0.0, 1.0, -0.002]
+  - [0.0, 0.0, 0.0, 1.0]
+
+T_tcp_to_spray_outlet:
+  - [1.0, 0.0, 0.0, 0.0]
+  - [0.0, 1.0, 0.0, 0.0]
+  - [0.0, 0.0, 1.0, 0.0]
+  - [0.0, 0.0, 0.0, 1.0]
+
+deployment:
+  status: dimensional_verification_required
+  quality_accepted: false
+  execution_allowed: false
+  tool_axis_jog_check:
+    date: "2026-07-23"
+    controller: ECO65-BI_generation_3
+    tool_frame: Arm_Tip
+    commanded_motion_m: [0.0, 0.0, 0.002]
+    measured_base_delta_m: [-0.001299, 0.000207, -0.001486]
+    measured_distance_m: 0.001984
+    return_position_error_m: 0.000033
+    command_round_trip_passed: true
+    physical_direction_observation: passed_flange_to_nozzle_tip
+    physical_direction_confirmed_by: user
+    physical_direction_confirmed_date: "2026-07-23"
+  controller_frame_check:
+    date: "2026-07-23"
+    frame_name: Arm_Tip
+    controller_translation_m: [0.0, 0.0, 0.0]
+    controller_euler_rad: [0.0, 0.0, 0.0]
+    ros_link6_pose_matches_controller_zero_tool: true
+    interpretation: controller_frame_is_flange_zero_tool
+  notes:
+    - Verify the Link6 mounting origin and orientation on the physical tool.
+    - The rounded nozzle end is 0.318 m axially from Link6 and is not the motion TCP.
+    - The outlet near edge is 0.003 m behind the rounded end; its 0.010 m axial center is 0.008 m behind the end.
+    - The side-outlet motion TCP is 0.310 m axially and 0.002 m radially from Link6.
+    - The 0.118 m gun-body stack is 0.008 m end plate + 0.070 m fixed cover + 0.040 m gun head.
+    - Controller Arm_Tip is a zero tool; software must apply the complete process TCP transform.
+    - Validate the full six-degree-of-freedom transform before execution.

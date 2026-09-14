@@ -1,0 +1,140 @@
+schema_version: 2
+status: measurement_requires_review
+motion_commands_published: false
+sources:
+  pose_topic: /rm_driver/udp_arm_position
+  path_topic: /plasma/planned_spray_path/base
+  camera_path_topic: /plasma/planned_spray_path/camera
+  tcp_yaml: /home/larusxu/CodeSpace/PlasmaRobot/install/plasma_tool_description/share/plasma_tool_description/config/tcp_3_4_200_1x10.yaml
+records:
+  - record_id: 20260725_235523
+    captured_at: 2026-07-25T23:55:23+0800
+    path_id: 重建1路径_1784994484_797217327
+    acquisition_id: 重建1路径_1784994484_797217327@1784994484.797217327
+    calibration_id: l515_handeye_20260723_152410_horaud+training_refinement:entry_reach_refinement_candidate_20260725
+    path_execution_permitted: false
+    target_kind: geometric_cavity_mouth_for_rounded_nozzle_tip
+    T_base_to_target_nozzle_tip:
+      -
+        - -0.2179703284515553
+        - 0.7226674049499501
+        - -0.6559274027951767
+        - -0.5045487289551349
+      -
+        - -0.1795477123472362
+        - -0.6903091578524929
+        - -0.7008822194747533
+        - -0.02302339574825482
+      -
+        - -0.9592974277592925
+        - -0.03500126294702893
+        - 0.2802201932169017
+        - 0.02200882561241746
+      -
+        - 0
+        - 0
+        - 0
+        - 1
+    cavity_outward_axis_base:
+      - 0.2179703284515555
+      - 0.1795477123472359
+      - 0.9592974277592926
+    T_base_to_observed_nozzle_tip:
+      -
+        - -0.07141257086503175
+        - 0.865774651089895
+        - -0.4953125258386031
+        - -0.5162328946125844
+      -
+        - 0.1144343637869752
+        - -0.4861900342672959
+        - -0.8663278980639119
+        - -0.04611834662474603
+      -
+        - -0.9908607475862168
+        - -0.1185474761829034
+        - -0.0643542911043771
+        - 0.006991160849667452
+      -
+        - 0
+        - 0
+        - 0
+        - 1
+    source_geometry:
+      frame_id: camera_depth_optical_frame
+      T_source_to_target_nozzle_tip:
+        -
+          - -0.5253230347916227
+          - -0.6870409579896068
+          - -0.5020064054990168
+          - -0.03386978549118812
+        -
+          - 0.3049212638420223
+          - 0.398789987360585
+          - -0.8648639019163237
+          - 0.09553758889940467
+        -
+          - 0.7943920518071059
+          - -0.6074053572579582
+          - -1.691833506622942e-07
+          - 0.4914498925612837
+        -
+          - 0
+          - 0
+          - 0
+          - 1
+      cavity_outward_axis:
+        - 0.5253230347916226
+        - -0.3049212638420224
+        - -0.7943920518071059
+    capture_joint_state:
+      name:
+        - joint1
+        - joint2
+        - joint3
+        - joint4
+        - joint5
+        - joint6
+      position_rad:
+        - 0.2642976984024048
+        - 0.08616810352802277
+        - -1.101374219703674
+        - -0.1801538062572479
+        - 1.189723564910889
+        - 3.717373478698731
+    observed_minus_target:
+      translation_m:
+        - -0.01168416565744945
+        - -0.02309495087649121
+        - -0.01501766476275001
+      norm_mm: 29.92368189285213
+      signed_axial_mm: -21.09985420053988
+      lateral_mm: 21.21845637035282
+      axis_alignment_deg: 18.99454644179156
+      full_orientation_deg: 24.14426154218295
+qualification:
+  complete_records: 1
+  distinct_acquisition_ids: 1
+  required_distinct_acquisitions: 3
+  mean_translation_mm:
+    - -11.68416565744945
+    - -23.09495087649121
+    - -15.01766476275001
+  translation_stddev_mm:
+    - 0
+    - 0
+    - 0
+  mean_norm_mm: 29.92368189285213
+  max_norm_mm: 29.92368189285213
+  max_abs_axial_mm: 21.09985420053988
+  max_lateral_mm: 21.21845637035282
+  max_axis_alignment_deg: 18.99454644179156
+  limits:
+    max_norm_mm: 5
+    max_abs_axial_mm: 5
+    max_lateral_mm: 3
+    max_axis_alignment_deg: 2
+  all_errors_within_limits: false
+  accepted: false
+  scope: camera-to-base and rounded-nozzle-tip insertion accuracy at cavity mouth
+  automatic_yaml_approval: false

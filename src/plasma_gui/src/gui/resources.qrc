@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>ui_source/winicon.png</file>
+        <file>ui_source/check/start-40.png</file>
+        <file>ui_source/check/loading-50.gif</file>
+        <file>ui_source/check/check-mark.gif</file>
+        <file>ui_source/check/check-mark-40.png</file>
+        <file>ui_source/check/tick-box-40.png</file>
+        <file>ui_source/plasma/plasma-28.png</file>
+        <file>ui_source/arrow/arrow1-18.png</file>
+        <file>ui_source/arrow/arrow-18.png</file>
+        <file>ui_source/point/capture-40.png</file>
+        <file>ui_source/point/path-config-40.gif</file>
+    </qresource>
+</RCC>
